@@ -142,7 +142,4 @@ public class WorkspaceSettingDialog extends JDialog {
         return WorkSpace;
     }
     
-    private void setWorkPnlUnVisable(){
-        
-    }
 }
