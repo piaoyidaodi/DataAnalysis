@@ -3,16 +3,15 @@ package cc.comac.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -23,7 +22,7 @@ import cc.comac.util.DeviceProperty;
 
 public class WorkspaceSettingDialog extends JDialog {
 
-    private String WorkSpace;
+    private String workSpace;
 
     /**
      * This is a WorkspaceSettingDialog without a Frame owner.</br>
@@ -32,93 +31,120 @@ public class WorkspaceSettingDialog extends JDialog {
      * This Dialog will have only one "Next" Button to push the process of the
      * "First Use" this software.
      */
-    
-    // TODO The Components should be defined as "private" in the scope out of the Constructor for repeated code to be extract as a single function
-        
-    public WorkspaceSettingDialog() {
+
+    // TODO The JComponents should be defined as "private" in the scope out of
+    // the Constructor for repeated code to be extract as a single function
+
+    public WorkspaceSettingDialog(JDialog parent) {
         super();
         this.setTitle("Set Work Directory");
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         // Button "Next"
-        JButton btnNext = new JButton("Next");
+        JButton nextBtn = new JButton("Next");
 
         // RadioButton of "Default UserWorkspace" and "SpecifyWorkspace"
         // Label,TextField and FileChooserButton
-        // TODO The panel build ways of this place can be defined as variable parameter function, dynamic build panel
-        JRadioButton rbtnDftWkSpace = new JRadioButton(
-                "The Default UserWorkSpace of this WindowsPC is : " + DeviceProperty.getDefaultWkDir()+" ", true);
-        JRadioButton rbtnSpeWkSpace = new JRadioButton("Custom WorkSpace:", false);
-        JLabel lblSpeLabel = new JLabel("User Specify WorkSpace:",SwingConstants.RIGHT);
-        JTextField txtfSpeWkDir = new JTextField(DeviceProperty.getDefaultWkDir());
-        JButton fileChooserBtn=new JButton("...");
+        // TODO The panel build ways of this place can be defined as variable
+        // parameter function, dynamic build panel
+        JRadioButton defaultWkSpaceRadioBtn = new JRadioButton(
+                "The Default UserWorkSpace of this WindowsPC is : " + DeviceProperty.getDefaultWkDir() + " ", true);
+        JRadioButton specifyWkSpaceRadioBtn = new JRadioButton("Custom WorkSpace:", false);
+
+        JLabel specifyWkSpaceLabel = new JLabel("User Specify WorkSpace:", SwingConstants.RIGHT);
+        JTextField specifyWkSpaceTxtField = new JTextField(DeviceProperty.getDefaultWkDir());
+        JButton fileChooserBtn = new JButton("...");
 
         // SettingPanel and ButtonPanel
         JPanel settingPanel = new JPanel();
         JPanel btnPanel = new JPanel();
-        JPanel pnl_speWorkDir = new JPanel();
-        ButtonGroup buttonGroup = new ButtonGroup();
+        JPanel specifyWkSpacePanel = new JPanel();
+        ButtonGroup wkSpaceButtonGroup = new ButtonGroup();
 
         // Layout and Add Components to Panel
-        buttonGroup.add(rbtnDftWkSpace);
-        buttonGroup.add(rbtnSpeWkSpace);
+        wkSpaceButtonGroup.add(defaultWkSpaceRadioBtn);
+        wkSpaceButtonGroup.add(specifyWkSpaceRadioBtn);
 
-        pnl_speWorkDir.setLayout(new GridLayout(1, 3));//GridBagLayout shall be used
-        pnl_speWorkDir.add(lblSpeLabel);
-        pnl_speWorkDir.add(txtfSpeWkDir);
-        pnl_speWorkDir.add(fileChooserBtn);
-        
-        lblSpeLabel.setForeground(Color.GRAY);
-        txtfSpeWkDir.setEditable(false);
-        txtfSpeWkDir.setEnabled(false);
+        specifyWkSpacePanel.setLayout(new GridLayout(1, 3));// GridBagLayout
+                                                            // shall be used
+        specifyWkSpacePanel.add(specifyWkSpaceLabel);
+        specifyWkSpacePanel.add(specifyWkSpaceTxtField);
+        specifyWkSpacePanel.add(fileChooserBtn);
+
+        // Initial UI
+        specifyWkSpaceLabel.setForeground(Color.GRAY);
+        specifyWkSpaceTxtField.setEditable(false);
+        specifyWkSpaceTxtField.setEnabled(false);
         fileChooserBtn.setEnabled(false);
 
         settingPanel.setLayout(new GridLayout(3, 1));
-        settingPanel.add(rbtnDftWkSpace);
-        settingPanel.add(rbtnSpeWkSpace);
-        settingPanel.add(pnl_speWorkDir);
-        btnPanel.add(btnNext);
+        settingPanel.add(defaultWkSpaceRadioBtn);
+        settingPanel.add(specifyWkSpaceRadioBtn);
+        settingPanel.add(specifyWkSpacePanel);
+        btnPanel.add(nextBtn);
 
         // RadioButtonActionListener
-        rbtnDftWkSpace.addActionListener(new ActionListener() {
-            
+        defaultWkSpaceRadioBtn.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                lblSpeLabel.setForeground(Color.GRAY);
-                txtfSpeWkDir.setEnabled(false);
-                txtfSpeWkDir.setEditable(false);
+                specifyWkSpaceLabel.setForeground(Color.GRAY);
+                specifyWkSpaceTxtField.setEnabled(false);
+                specifyWkSpaceTxtField.setEditable(false);
                 fileChooserBtn.setEnabled(false);
             }
         });
-        
-        rbtnSpeWkSpace.addActionListener(new ActionListener() {
-            
+
+        specifyWkSpaceRadioBtn.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                lblSpeLabel.setForeground(Color.BLACK);
-                txtfSpeWkDir.setEnabled(true);
-                txtfSpeWkDir.setEditable(true);
+                specifyWkSpaceLabel.setForeground(Color.BLUE);
+                specifyWkSpaceTxtField.setEnabled(true);
+                specifyWkSpaceTxtField.setEditable(true);
                 fileChooserBtn.setEnabled(true);
             }
         });
-        
+
         // fileChooserBtn ActionListener
         fileChooserBtn.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO WorkSpace JFileChooser Dialog
+                FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
+                fileChooserDialog.resetChoosableFileFilters();
+                fileChooserDialog.setCurrentDirectory(new File(specifyWkSpaceTxtField.getText()));
+                fileChooserDialog.setFileSelectionMode(FileChooserDialog.DIRECTORIES_ONLY);
                 
+                int result=fileChooserDialog.showOpenDialog(WorkspaceSettingDialog.this);
+                
+                if (result==JFileChooser.APPROVE_OPTION) {
+                    workSpace=fileChooserDialog.getSelectedFile().getAbsolutePath();
+                    specifyWkSpaceTxtField.setText(workSpace);
+                }
             }
         });
 
-        // NextActionListener
-        btnNext.addActionListener(new ActionListener() {
+        // NextBtn ActionListener
+        nextBtn.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+                EventQueue.invokeLater(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        JDialog dialog = new ThemeChooserDialog((JDialog)WorkspaceSettingDialog.this);
+                        dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
+                                (int) (DeviceProperty.getDeviceHeight() / 3));
+                        dialog.setVisible(true);
+                    }
+                });
+                // TODO Choose the Theme of the SoftWare, Write the WorkSpace to Property.
+                setVisible(false);
             }
         });
+        
 
         add(btnPanel, BorderLayout.SOUTH);
         add(settingPanel, BorderLayout.CENTER);
@@ -131,15 +157,16 @@ public class WorkspaceSettingDialog extends JDialog {
 
             @Override
             public void run() {
-                JDialog dialog = new WorkspaceSettingDialog();
-                dialog.setLocation((int)(DeviceProperty.getDeviceWidth()/3), (int)(DeviceProperty.getDeviceHeight()/3));
+                JDialog dialog = new WorkspaceSettingDialog(null);
+                dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
+                        (int) (DeviceProperty.getDeviceHeight() / 3));
                 dialog.setVisible(true);
             }
         });
     }
 
-    String getWorkspace(){
-        return WorkSpace;
+    String getWorkspace() {
+        return workSpace;
     }
-    
+
 }

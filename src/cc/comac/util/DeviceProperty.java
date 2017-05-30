@@ -1,6 +1,9 @@
 package cc.comac.util;
 
 import java.awt.*;
+import java.util.HashMap;
+
+import javax.swing.UIManager;
 
 public class DeviceProperty {
     private static double deviceWidth;
@@ -32,8 +35,17 @@ public class DeviceProperty {
     public static Dimension Center() {
         return new Dimension((int) deviceWidth / 3, (int) deviceHeight / 3);
     }
-    
-    public static String getDefaultWkDir(){
+
+    public static String getDefaultWkDir() {
         return System.getProperty("user.home");
+    }
+
+    public static HashMap<String, String> getJavaTheme() {
+        HashMap<String, String> themes=new HashMap<>();
+        UIManager.LookAndFeelInfo[] uiInfos = UIManager.getInstalledLookAndFeels();
+        for (UIManager.LookAndFeelInfo info : uiInfos) {
+            themes.put(info.getName(), info.getClassName());
+        }
+        return themes;
     }
 }
