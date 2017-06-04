@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -35,7 +36,7 @@ public class WorkspaceSettingDialog extends JDialog {
     // TODO The JComponents should be defined as "private" in the scope out of
     // the Constructor for repeated code to be extract as a single function
 
-    public WorkspaceSettingDialog(JDialog parent) {
+    public WorkspaceSettingDialog(Window parent) {
         super();
         this.setTitle("Set Work Directory");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

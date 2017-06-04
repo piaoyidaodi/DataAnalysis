@@ -2,6 +2,7 @@ package cc.comac.ui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class ThemeChooserDialog extends JDialog {
 
     private HashMap<String, String> theme;
 
-    public ThemeChooserDialog(JDialog parent) {
+    public ThemeChooserDialog(Window parent) {
         super();
         this.setTitle("Choose Theme");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
