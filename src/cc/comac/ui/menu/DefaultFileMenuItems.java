@@ -25,9 +25,23 @@ public class DefaultFileMenuItems extends JMenuItem {
         case "OpenDirectory":
             menuItem=MenuItemsFactory.getOpenDirectoryItem();
             break;
-        
+           
+        case "Save...":
+        case "Save":
+            menuItem=MenuItemsFactory.getSaveItem();
+            break;
+            
+        case "SaveAs...":
+        case "SaveAs":
+            menuItem=MenuItemsFactory.getSaveAsItem();
+            break;
+            
+        case "Exit":
+            menuItem=MenuItemsFactory.getExitItem();
+            break;
+            
         default:
-            menuItem=new SelfDefineMenuItem(menuItemName);
+            menuItem=new JMenuItem(menuItemName);
             break;
         }
         return menuItem;

@@ -25,7 +25,9 @@ public class MainFrame extends JFrame {
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 frame.setTitle("MainFrame");
                 frame.setLocationByPlatform(true);
+                frame.pack();
                 frame.setVisible(true);
+                
 
             }
         });
