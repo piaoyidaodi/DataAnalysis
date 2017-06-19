@@ -30,7 +30,7 @@ public class ActionFactory {
             }
         };
         action.putValue(Action.NAME, "Open File...");
-        action.putValue(Action.SHORT_DESCRIPTION, "Open A Data File");
+        action.putValue(Action.SHORT_DESCRIPTION, "Open a Data File");
         // TODO OpenFile Icon
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_F);
@@ -54,7 +54,7 @@ public class ActionFactory {
                 }
         };
         action.putValue(Action.NAME, "Open Directory...");
-        action.putValue(Action.SHORT_DESCRIPTION, "Open A Data Directory");
+        action.putValue(Action.SHORT_DESCRIPTION, "Open a Data Directory");
         // TODO OpenFile Icon
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
@@ -71,6 +71,10 @@ public class ActionFactory {
                 
             }
         };
+        action.putValue(Action.NAME, "Save");
+        action.putValue(Action.SHORT_DESCRIPTION, "Save File");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         return action;
     }
 
@@ -80,9 +84,20 @@ public class ActionFactory {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
+                FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
+                fileChooserDialog.resetChoosableFileFilters();
+                fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                fileChooserDialog.setCurrentDirectory(new File("."));
                 
+                fileChooserDialog.showSaveDialog(null);
+
             }
         };
+        action.putValue(Action.NAME, "Save As...");
+        action.putValue(Action.SHORT_DESCRIPTION, "Save File As...");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
+        
         return action;
     }
 
@@ -91,11 +106,30 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                System.exit(0);
                 
             }
         };
-        
+        action.putValue(Action.NAME, "Exit");
+        action.putValue(Action.SHORT_DESCRIPTION, "Exit");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
+        return action;
+    }
+
+    public static AbstractAction getAboutAction() {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            // My Information
+                                
+            }
+        };
+        action.putValue(Action.NAME, "About");
+        action.putValue(Action.SHORT_DESCRIPTION, "About The App");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
         return action;
     }
 }
