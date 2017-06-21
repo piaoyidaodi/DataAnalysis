@@ -1,4 +1,4 @@
-package cc.comac.ui;
+package cc.comac.ui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

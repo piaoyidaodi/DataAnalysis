@@ -1,4 +1,4 @@
-package cc.comac.ui;
+package cc.comac.ui.dialog;
 
 import javax.swing.JFileChooser;
 

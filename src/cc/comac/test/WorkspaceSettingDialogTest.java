@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import cc.comac.ui.WorkspaceSettingDialog;
+import cc.comac.ui.dialog.WorkspaceSettingDialog;
 import cc.comac.util.DeviceProperty;
 
 public class WorkspaceSettingDialogTest {

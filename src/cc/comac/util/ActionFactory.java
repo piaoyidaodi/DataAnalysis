@@ -1,5 +1,6 @@
 package cc.comac.util;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -7,9 +8,11 @@ import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import cc.comac.ui.FileChooserDialog;
+import cc.comac.ui.dialog.AboutDialog;
+import cc.comac.ui.dialog.FileChooserDialog;
 
 public class ActionFactory {
     public static AbstractAction action=null;
@@ -122,12 +125,23 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-            // My Information
+            // TODO My Information
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        AboutDialog aboutDialog=new AboutDialog();
+                        aboutDialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                        aboutDialog.pack();
+                        aboutDialog.setResizable(false);
+                        aboutDialog.setVisible(true);                        
+                    }
+                });
                                 
             }
         };
-        action.putValue(Action.NAME, "About");
-        action.putValue(Action.SHORT_DESCRIPTION, "About The App");
+        action.putValue(Action.NAME, "About...");
+        action.putValue(Action.SHORT_DESCRIPTION, "About The Author");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
         return action;
