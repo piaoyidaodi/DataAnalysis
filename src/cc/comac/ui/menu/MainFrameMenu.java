@@ -7,7 +7,7 @@ public class MainFrameMenu extends JMenu {
     public MainFrameMenu(JFrame parent) {
 
         // MenuBar of the MainFrame
-        MainFrameMenuBar mainFrameMenuBar = new MainFrameMenuBar("File","Edit","Help");
+        MainFrameMenuBar mainFrameMenuBar = new MainFrameMenuBar(parent,"File","Edit","Help");
         parent.setJMenuBar(mainFrameMenuBar);
 
     }
