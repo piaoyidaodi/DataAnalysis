@@ -70,7 +70,7 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                // TODO Complete the SaveAction
                 
             }
         };
@@ -86,7 +86,7 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                // TODO Refine the CurrentDirectory
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.resetChoosableFileFilters();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -125,7 +125,6 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-            // TODO My Information
                 EventQueue.invokeLater(new Runnable() {
                     
                     @Override

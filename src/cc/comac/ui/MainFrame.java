@@ -6,12 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import cc.comac.ui.menu.MainFrameMenu;
+import cc.comac.ui.toolbar.MainFrameToolbar;
 
 public class MainFrame extends JFrame {
 
     public MainFrame() {
         MainFrameMenu menu = new MainFrameMenu(this);
+        MainFrameToolbar toolbar=new MainFrameToolbar(this);
+
         add(menu);
+        add(toolbar);
         
     }
 

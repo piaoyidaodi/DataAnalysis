@@ -104,10 +104,12 @@ public class DefaultAboutDialog extends JFrame {
                     e1.printStackTrace();
                 }
             }
+            @SuppressWarnings("deprecation")
             @Override
             public void mouseEntered(MouseEvent e) {
                 DefaultAboutDialog.this.setCursor(Cursor.HAND_CURSOR);
             }
+            @SuppressWarnings("deprecation")
             @Override
             public void mouseExited(MouseEvent e) {
                 DefaultAboutDialog.this.setCursor(Cursor.DEFAULT_CURSOR);
