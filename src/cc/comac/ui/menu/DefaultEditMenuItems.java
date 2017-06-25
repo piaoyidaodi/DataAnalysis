@@ -1,5 +1,6 @@
 package cc.comac.ui.menu;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
 public class DefaultEditMenuItems extends JMenuItem{
@@ -8,12 +9,12 @@ public class DefaultEditMenuItems extends JMenuItem{
         super();
     }
     
-    public static JMenuItem creatMenuItem(String menuItemName) {
+    public static JMenuItem creatMenuItem(JComponent parent,String menuItemName) {
         JMenuItem menuItem=null;
         
         switch (menuItemName) {
-        case "":
-            
+        case "ThemeChooser":
+            menuItem =MenuItemsFactory.getThemeItem(parent);
             break;
 
         default:

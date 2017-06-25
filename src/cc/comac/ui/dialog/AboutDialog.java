@@ -1,8 +1,14 @@
 package cc.comac.ui.dialog;
 
-public class AboutDialog extends DefaultAboutDialog {
+import javax.swing.JComponent;
 
-    public AboutDialog(){
+public class AboutDialog extends DefaultAboutDialog {
+    
+    public AboutDialog() {
         super();
+    }
+
+    public AboutDialog(JComponent parent){
+        super(parent);
     }
 }

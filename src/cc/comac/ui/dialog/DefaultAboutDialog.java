@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +39,10 @@ public class DefaultAboutDialog extends JFrame {
     private final int DEFAULT_HEIGHT=(int)DeviceProperty.getDeviceHeight()/3;
     
     public DefaultAboutDialog() {
+        super();
+    }
+    
+    public DefaultAboutDialog(JComponent parent) {
         // Initial Dialog
         this.setTitle("About...");
         this.setLocation(DEFAULT_WIDTH, DEFAULT_HEIGHT);

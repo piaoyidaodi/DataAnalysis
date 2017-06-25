@@ -7,17 +7,19 @@ import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
+import cc.comac.ui.dialog.ThemeChooserDialog;
 
 public class ActionFactory {
     public static AbstractAction action=null;
     
-    public static AbstractAction getOpenFileAction(){
+    public static AbstractAction getOpenFileAction(JComponent parent){
         action=new AbstractAction() {
             
             @Override
@@ -28,7 +30,7 @@ public class ActionFactory {
                 fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files", ".txt",".zip"));
                 fileChooserDialog.setCurrentDirectory(new File("."));
                 //TODO Choose Target Data
-                fileChooserDialog.showOpenDialog(null);
+                fileChooserDialog.showOpenDialog(parent);
 
             }
         };
@@ -41,7 +43,7 @@ public class ActionFactory {
         return action;
     }
 
-    public static AbstractAction getOpenDirectoryAction() {
+    public static AbstractAction getOpenDirectoryAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
@@ -52,7 +54,7 @@ public class ActionFactory {
                 fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooserDialog.setCurrentDirectory(new File("."));
                 //TODO Choose Dialog
-                fileChooserDialog.showOpenDialog(null);
+                fileChooserDialog.showOpenDialog(parent);
                 
                 }
         };
@@ -65,7 +67,7 @@ public class ActionFactory {
         return action;
     }
 
-    public static AbstractAction getSaveAction() {
+    public static AbstractAction getSaveAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
@@ -81,7 +83,7 @@ public class ActionFactory {
         return action;
     }
 
-    public static AbstractAction getSaveAsAction() {
+    public static AbstractAction getSaveAsAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
@@ -92,7 +94,7 @@ public class ActionFactory {
                 fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooserDialog.setCurrentDirectory(new File("."));
                 
-                fileChooserDialog.showSaveDialog(null);
+                fileChooserDialog.showSaveDialog(parent);
 
             }
         };
@@ -104,7 +106,7 @@ public class ActionFactory {
         return action;
     }
 
-    public static AbstractAction getExitAction() {
+    public static AbstractAction getExitAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
@@ -120,7 +122,7 @@ public class ActionFactory {
         return action;
     }
 
-    public static AbstractAction getAboutAction() {
+    public static AbstractAction getAboutAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
@@ -129,7 +131,7 @@ public class ActionFactory {
                     
                     @Override
                     public void run() {
-                        AboutDialog aboutDialog=new AboutDialog();
+                        AboutDialog aboutDialog=new AboutDialog(parent);
                         aboutDialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
                         aboutDialog.pack();
                         aboutDialog.setResizable(false);
@@ -143,6 +145,31 @@ public class ActionFactory {
         action.putValue(Action.SHORT_DESCRIPTION, "About The Author");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
+        return action;
+    }
+
+    public static AbstractAction getThemeAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        ThemeChooserDialog themeChooserDialog=new ThemeChooserDialog(parent);
+                        themeChooserDialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                        themeChooserDialog.pack();
+                        themeChooserDialog.setVisible(true);
+                        
+                    }
+                });
+            }
+        };
+        action.putValue(Action.NAME, "Theme...");
+        action.putValue(Action.SHORT_DESCRIPTION, "Change App Theme");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);
         return action;
     }
 }

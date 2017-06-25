@@ -4,15 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -21,7 +20,7 @@ import javax.swing.SwingConstants;
 
 import cc.comac.util.DeviceProperty;
 
-public class WorkspaceSettingDialog extends JDialog {
+public class WorkspaceSettingDialog extends JFrame {
 
     private String workSpace;
 
@@ -36,7 +35,7 @@ public class WorkspaceSettingDialog extends JDialog {
     // TODO The JComponents should be defined as "private" in the scope out of
     // the Constructor for repeated code to be extract as a single function
 
-    public WorkspaceSettingDialog(Window parent) {
+    public WorkspaceSettingDialog(JFrame parent) {
         super();
         this.setTitle("Set Work Directory");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -135,7 +134,7 @@ public class WorkspaceSettingDialog extends JDialog {
 
                     @Override
                     public void run() {
-                        JDialog dialog = new ThemeChooserDialog((JDialog)WorkspaceSettingDialog.this);
+                        JFrame dialog = new ThemeChooserDialog(WorkspaceSettingDialog.this);
                         dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
                                 (int) (DeviceProperty.getDeviceHeight() / 3));
                         dialog.setVisible(true);
@@ -158,7 +157,7 @@ public class WorkspaceSettingDialog extends JDialog {
 
             @Override
             public void run() {
-                JDialog dialog = new WorkspaceSettingDialog(null);
+                JFrame dialog = new WorkspaceSettingDialog(null);
                 dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
                         (int) (DeviceProperty.getDeviceHeight() / 3));
                 dialog.setVisible(true);

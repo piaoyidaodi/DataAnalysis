@@ -1,6 +1,6 @@
 package cc.comac.ui.menu;
 
-import javax.swing.JFrame;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
@@ -10,11 +10,11 @@ public class MainFrameMenuBar extends JMenuBar {
         super();
     }
     
-    public MainFrameMenuBar(JFrame parent,String...menuOptionName){
+    public MainFrameMenuBar(JComponent parent,String...menuOptionName){
         super();
         if (menuOptionName.length>0){
             for(String menuName:menuOptionName){
-                JMenu menu=MainFrameMenuOption.creatMenu(menuName);
+                JMenu menu=MainFrameMenuOption.creatMenu(parent,menuName);
                 this.add(menu);
             }
         }
