@@ -7,7 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
-import cc.comac.ui.mainlayout.MainFrameWestPanel;
+import cc.comac.ui.mainlayout.MainFrameCenterPane;
+import cc.comac.ui.mainlayout.MainFrameWestPane;
 import cc.comac.ui.menu.MainFrameMenu;
 import cc.comac.ui.toolbar.MainFrameToolbar;
 
@@ -18,13 +19,18 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         MainFrameMenu menu = new MainFrameMenu(this);
         MainFrameToolbar toolbar=new MainFrameToolbar(this);
-        MainFrameWestPanel westPanel=new MainFrameWestPanel(this);
-        MainFrameCenterPanel centerPanel=new MainFrameCenterPanel(this);
+        
+        mainSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
+        MainFrameWestPane westPane=new MainFrameWestPane(mainSplitPane);
+        MainFrameCenterPane centerPane=new MainFrameCenterPane(mainSplitPane);
+        
+//        JTabbedPane tabbedPane=new JTabbedPane();
+//        tabbedPane.add(new JScrollPane(new JTree()));
         
         // MainSplitPane
-        mainSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-        mainSplitPane.setLeftComponent(westPanel);
-        mainSplitPane.setRightComponent(centerPanel);
+        mainSplitPane.setLeftComponent(westPane);
+//        mainSplitPane.setLeftComponent(tabbedPane);
+        mainSplitPane.setRightComponent(centerPane);
         mainSplitPane.setDividerSize(5);
         
         add(menu);

@@ -51,4 +51,10 @@ public class MenuItemsFactory {
         return menuItem;
     }
 
+    public static JMenuItem getWorkSpaceItem(JComponent parent) {
+        menuItem=new JMenuItem(ActionFactory.getWorkSpaceAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt W"));
+        return menuItem;
+    }
+
 }

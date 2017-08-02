@@ -27,10 +27,13 @@ public class ActionFactory {
                 
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.resetChoosableFileFilters();
-                fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files", ".txt",".zip"));
-                fileChooserDialog.setCurrentDirectory(new File("."));
+                fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files(.txt , .zip)", ".txt",".zip"));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
                 //TODO Choose Target Data
-                fileChooserDialog.showOpenDialog(parent);
+                int result=fileChooserDialog.showOpenDialog(parent);
+                
+                if(result==JFileChooser.APPROVE_OPTION)
+                    Context.getInstance().setTargetFile(fileChooserDialog.getSelectedFile().getAbsolutePath());
 
             }
         };
@@ -52,10 +55,12 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.resetChoosableFileFilters();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File("."));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
                 //TODO Choose Dialog
-                fileChooserDialog.showOpenDialog(parent);
+                int result=fileChooserDialog.showOpenDialog(parent);
                 
+                if(result==JFileChooser.APPROVE_OPTION)
+                    Context.getInstance().setWorkSpace(fileChooserDialog.getSelectedFile().getAbsolutePath());
                 }
         };
         action.putValue(Action.NAME, "Open Directory...");
@@ -92,7 +97,7 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.resetChoosableFileFilters();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File("."));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
                 
                 fileChooserDialog.showSaveDialog(parent);
 
@@ -170,6 +175,32 @@ public class ActionFactory {
         action.putValue(Action.SHORT_DESCRIPTION, "Change App Theme");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);
+        return action;
+    }
+
+    public static AbstractAction getWorkSpaceAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
+                        fileChooserDialog.resetChoosableFileFilters();
+                        fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                        fileChooserDialog.setCurrentDirectory(new File("."));
+                        //TODO Choose Dialog
+                        fileChooserDialog.showOpenDialog(parent);
+                    }
+                });
+            }
+        };
+        action.putValue(Action.NAME, "Setting WorkSpace");
+        action.putValue(Action.SHORT_DESCRIPTION, "Set WorkSpace");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_W);
         return action;
     }
 }

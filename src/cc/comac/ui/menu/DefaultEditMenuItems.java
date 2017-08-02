@@ -16,6 +16,10 @@ public class DefaultEditMenuItems extends JMenuItem{
         case "ThemeChooser":
             menuItem =MenuItemsFactory.getThemeItem(parent);
             break;
+            
+        case "WorkSpace":
+            menuItem=MenuItemsFactory.getWorkSpaceItem(parent);
+            break;
 
         default:
             menuItem=new JMenuItem(menuItemName);

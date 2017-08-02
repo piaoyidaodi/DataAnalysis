@@ -18,6 +18,7 @@ public class DefaultEditMenu extends JMenu {
         super("Edit");
         
         addMenuItem(parent,this, "ThemeChooser");
+        addMenuItem(parent, this, "WorkSpace");
     }
 
     void addMenuItem(JComponent parent,JMenu menu,String menuItemName,Action...actions) {

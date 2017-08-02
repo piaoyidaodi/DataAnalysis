@@ -18,6 +18,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import cc.comac.util.Context;
 import cc.comac.util.DeviceProperty;
 
 public class WorkspaceSettingDialog extends JFrame {
@@ -39,6 +40,9 @@ public class WorkspaceSettingDialog extends JFrame {
         super();
         this.setTitle("Set Work Directory");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        Context.getInstance().setWorkSpace(DeviceProperty.getDefaultWkDir());
+        
         // Button "Next"
         JButton nextBtn = new JButton("Next");
 
@@ -121,6 +125,7 @@ public class WorkspaceSettingDialog extends JFrame {
                 if (result==JFileChooser.APPROVE_OPTION) {
                     workSpace=fileChooserDialog.getSelectedFile().getAbsolutePath();
                     specifyWkSpaceTxtField.setText(workSpace);
+                    
                 }
             }
         });
@@ -130,18 +135,31 @@ public class WorkspaceSettingDialog extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                EventQueue.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        JFrame dialog = new ThemeChooserDialog(WorkspaceSettingDialog.this);
-                        dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
-                                (int) (DeviceProperty.getDeviceHeight() / 3));
-                        dialog.setVisible(true);
-                    }
-                });
+//                EventQueue.invokeLater(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        JFrame dialog = new ThemeChooserDialog(WorkspaceSettingDialog.this);
+//                        dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
+//                                (int) (DeviceProperty.getDeviceHeight() / 3));
+//                        dialog.setVisible(true);
+//                    }
+//                });
                 // TODO Choose the Theme of the SoftWare, Write the WorkSpace to Property.
+                
+                JFrame dialog = new ThemeChooserDialog(WorkspaceSettingDialog.this);
+                dialog.setLocation((int) (DeviceProperty.getDeviceWidth() / 3),
+                        (int) (DeviceProperty.getDeviceHeight() / 3));
+                dialog.setVisible(true);
                 setVisible(false);
+                
+                if (defaultWkSpaceRadioBtn.isSelected()) {
+                    Context.getInstance().setWorkSpace(DeviceProperty.getDefaultWkDir());
+                } else {
+                    Context.getInstance().setWorkSpace(specifyWkSpaceTxtField.getText());
+                }
+                
+                System.out.println(Context.getInstance().getWorkSpace());
             }
         });
         

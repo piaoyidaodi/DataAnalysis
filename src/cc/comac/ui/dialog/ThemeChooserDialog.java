@@ -1,6 +1,7 @@
 package cc.comac.ui.dialog;
 
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import cc.comac.ui.MainFrame;
+import cc.comac.util.Context;
 import cc.comac.util.DeviceProperty;
 
 public class ThemeChooserDialog extends JFrame {
@@ -105,10 +108,24 @@ public class ThemeChooserDialog extends JFrame {
             
             @Override
             public void actionPerformed(ActionEvent e) {
+                Context.getInstance().setTheme(theme.get(themeListComboBox.getItemAt(themeListComboBox.getSelectedIndex())));
                 
-                ThemeChooserDialog.this.dispose();
-                parent.dispose();
-                                            
+                // TODO MainFrame.initial
+                EventQueue.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        JFrame frame = new MainFrame();
+                        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                        frame.setTitle("MainFrame");
+                        frame.setLocationByPlatform(true);
+                        frame.pack();
+                        frame.setVisible(true);
+                        
+
+                    }
+                });
+                ThemeChooserDialog.this.setVisible(false);                                            
             }
         });
         
@@ -181,17 +198,12 @@ public class ThemeChooserDialog extends JFrame {
             //TODO restore Theme
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                ThemeChooserDialog.this.dispose();                                            
+                Context.getInstance().setTheme(theme.get(themeListComboBox.getItemAt(themeListComboBox.getSelectedIndex())));
+//                new MainFrame();
+                ThemeChooserDialog.this.setVisible(false);
             }
         });
         
     }
     
-    
-
-    public static void main(String[] args) {
-
-    }
-
 }
