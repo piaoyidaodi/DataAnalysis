@@ -1,6 +1,7 @@
 package cc.comac.util;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 
 import javax.swing.UIManager;
@@ -47,5 +48,9 @@ public class DeviceProperty {
             themes.put(info.getName(), info.getClassName());
         }
         return themes;
+    }
+    
+    public static String getSeparator(){
+        return File.separator;
     }
 }
