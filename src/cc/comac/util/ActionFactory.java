@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import cc.comac.data.DataPreProcess;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
@@ -26,15 +27,25 @@ public class ActionFactory {
             public void actionPerformed(ActionEvent e) {
                 
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
-                fileChooserDialog.resetChoosableFileFilters();
-                fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files(.txt , .zip)", ".txt",".zip"));
+                fileChooserDialog.init();
+                fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files(.txt)","txt"));
                 fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
                 //TODO Choose Target Data
                 int result=fileChooserDialog.showOpenDialog(parent);
                 
-                if(result==JFileChooser.APPROVE_OPTION)
+                if(result==JFileChooser.APPROVE_OPTION){
                     Context.getInstance().setTargetFile(fileChooserDialog.getSelectedFile().getAbsolutePath());
-
+                    EventQueue.invokeLater(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            DataPreProcess dataPreProcess=new DataPreProcess();
+                            dataPreProcess.initFile();
+                            
+                        }
+                    });
+                }
+                    
             }
         };
         action.putValue(Action.NAME, "Open File...");
@@ -53,15 +64,25 @@ public class ActionFactory {
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
-                fileChooserDialog.resetChoosableFileFilters();
+                fileChooserDialog.init();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
                 //TODO Choose Dialog
                 int result=fileChooserDialog.showOpenDialog(parent);
                 
-                if(result==JFileChooser.APPROVE_OPTION)
+                if(result==JFileChooser.APPROVE_OPTION){
                     Context.getInstance().setWorkSpace(fileChooserDialog.getSelectedFile().getAbsolutePath());
+                    EventQueue.invokeLater(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            DataPreProcess dataPreProcess=new DataPreProcess();
+                            dataPreProcess.initDirectory();
+                            
+                        }
+                    });
                 }
+            }
         };
         action.putValue(Action.NAME, "Open Directory...");
         action.putValue(Action.SHORT_DESCRIPTION, "Open a Data Directory");
@@ -95,7 +116,7 @@ public class ActionFactory {
             public void actionPerformed(ActionEvent e) {
                 // TODO Refine the CurrentDirectory
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
-                fileChooserDialog.resetChoosableFileFilters();
+                fileChooserDialog.init();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
                 
@@ -188,7 +209,7 @@ public class ActionFactory {
                     @Override
                     public void run() {
                         FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
-                        fileChooserDialog.resetChoosableFileFilters();
+                        fileChooserDialog.init();
                         fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                         fileChooserDialog.setCurrentDirectory(new File("."));
                         //TODO Choose Dialog

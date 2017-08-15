@@ -17,4 +17,9 @@ public class FileChooserDialog extends JFileChooser {
     public static FileChooserDialog getInstance() {
         return instance;
     }
+    
+    public void init(){
+        this.resetChoosableFileFilters();
+        this.setFileSelectionMode(FileChooserDialog.FILES_AND_DIRECTORIES);
+    }
 }
