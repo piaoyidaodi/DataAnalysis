@@ -1,46 +1,47 @@
 package cc.comac.data;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class WorkspaceDataProcess {
+import cc.comac.controller.WestPaneDirTreeController;
 
-    private String workSpace=null;
+public class FileDataProcessRunnable implements Runnable{
     
-    public WorkspaceDataProcess(String workSpace) {
-        this.workSpace=workSpace;
-    }
-    
-    public void initWorkSpace(){
-        File workSpaceFile=new File(workSpace);
-        
-        if (workSpaceFile.exists()) {
-            doLoop(workSpaceFile);
-        }
+    private String targetFile=null;
+    public FileDataProcessRunnable(){
         
     }
+    
+    public FileDataProcessRunnable(String targetFile){
+        this.targetFile=targetFile;
+    }
+    
+    public void run(){
+        doProcess();
+        WestPaneDirTreeController.getInstance().updateUI();
+        
+    }
+    
 
-    public void update(){
-        
-    }
-    
-    private void doLoop(File file) {
-        if (file.isDirectory()){
-          File[] fileList=file.listFiles();
-          for (File subFile:fileList){
-              doLoop(subFile);
-          }
+    public void doProcess() {
+        File file=new File(targetFile);
+        if (file.exists()) {
+            doResolve(file);
+            doZip(file);
+            file.delete();
         }
-        else{
-          if (getPostfix(file).equals("txt")){
-              doResolve(file);
-              doZip(file);
-              file.delete();
-          }
-       }
     }
     
     private void doZip(File file) {
@@ -270,14 +271,7 @@ public class WorkspaceDataProcess {
             }
         }
     }
-
-    private String getPostfix(File file){
-        if (!file.isDirectory()) {
-            return file.getName().substring(file.getName().lastIndexOf(".") + 1);
-        }
-        else return null;
-    }
-
+    
     private String getParentPath(File file){
         if (file.isDirectory()){
             return file.getAbsolutePath();
@@ -285,7 +279,7 @@ public class WorkspaceDataProcess {
         else
             return file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator));
     }
-
+    
     private String getNameNoPFix(File file){
         if (!file.isDirectory())
             return file.getName().substring(0,file.getName().lastIndexOf("."));
@@ -293,4 +287,3 @@ public class WorkspaceDataProcess {
     }
 
 }
-

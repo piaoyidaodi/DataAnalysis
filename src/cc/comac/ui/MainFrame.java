@@ -11,21 +11,30 @@ import cc.comac.ui.mainlayout.MainFrameCenterPane;
 import cc.comac.ui.mainlayout.MainFrameWestPane;
 import cc.comac.ui.menu.MainFrameMenu;
 import cc.comac.ui.toolbar.MainFrameToolbar;
+import cc.comac.util.Context;
 
 public class MainFrame extends JFrame {
     
+    private MainFrameMenu menu=null;
+    private MainFrameToolbar toolbar=null;
     private JSplitPane mainSplitPane=null;
+    private MainFrameCenterPane centerPane=null;
+    private MainFrameWestPane westPane=null;
 
     public MainFrame() {
-        MainFrameMenu menu = new MainFrameMenu(this);
-        MainFrameToolbar toolbar=new MainFrameToolbar(this);
+        menu = new MainFrameMenu(this);
+        toolbar=new MainFrameToolbar(this);
         
         mainSplitPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
-        MainFrameWestPane westPane=new MainFrameWestPane(mainSplitPane);
-        MainFrameCenterPane centerPane=new MainFrameCenterPane(mainSplitPane);
+        centerPane=new MainFrameCenterPane(mainSplitPane);
+        westPane=new MainFrameWestPane(mainSplitPane);
         
-//        JTabbedPane tabbedPane=new JTabbedPane();
-//        tabbedPane.add(new JScrollPane(new JTree()));
+        Context.getInstance().setMainFrameMenu(menu);
+        Context.getInstance().setMainFrameToolbar(toolbar);
+        Context.getInstance().setMainFrameWestPane(westPane);
+        Context.getInstance().setMainFrameCenterPane(centerPane);
+        Context.getInstance().setMainPane(mainSplitPane);
+        
         
         // MainSplitPane
         mainSplitPane.setLeftComponent(westPane);
@@ -36,8 +45,6 @@ public class MainFrame extends JFrame {
         add(menu);
         add(toolbar,BorderLayout.NORTH);
         add(mainSplitPane,BorderLayout.CENTER);
-//        add(westPanel,BorderLayout.WEST);
-//        add(dataTree,BorderLayout.WEST);
         
     }
 

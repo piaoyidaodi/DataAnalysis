@@ -10,14 +10,6 @@ public class DeviceProperty {
     private static double deviceWidth;
     private static double deviceHeight;
 
-    /*
-     * private static final DeviceProperty instance = new DeviceProperty();
-     * 
-     * private DeviceProperty() { }
-     * 
-     * public static DeviceProperty getDeviceProperty() { return instance; }
-     */
-
     private static Dimension getDeviceScreenSize() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         deviceWidth = screenSize.getWidth();

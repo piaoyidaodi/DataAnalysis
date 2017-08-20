@@ -8,7 +8,7 @@ public class MainFrameWestPane extends DefaultMainFrameWestPane {
         super();
     }
 
-    public MainFrameWestPane(JSplitPane westPane) {
-        super(westPane);
+    public MainFrameWestPane(JSplitPane mainPane) {
+        super.init(mainPane);
     }
 }

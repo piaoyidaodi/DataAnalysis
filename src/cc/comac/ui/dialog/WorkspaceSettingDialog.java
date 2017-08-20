@@ -41,7 +41,7 @@ public class WorkspaceSettingDialog extends JFrame {
         this.setTitle("Set Work Directory");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
-        Context.getInstance().setWorkSpace(DeviceProperty.getDefaultWkDir());
+//        Context.getInstance().setWorkSpace(DeviceProperty.getDefaultWkDir());
         
         // Button "Next"
         JButton nextBtn = new JButton("Next");
@@ -154,12 +154,12 @@ public class WorkspaceSettingDialog extends JFrame {
                 setVisible(false);
                 
                 if (defaultWkSpaceRadioBtn.isSelected()) {
-                    Context.getInstance().setWorkSpace(DeviceProperty.getDefaultWkDir());
+                    Context.getInstance().setTarget(DeviceProperty.getDefaultWkDir());
                 } else {
-                    Context.getInstance().setWorkSpace(specifyWkSpaceTxtField.getText());
+                    Context.getInstance().setTarget(specifyWkSpaceTxtField.getText());
                 }
                 
-                System.out.println(Context.getInstance().getWorkSpace());
+                System.out.println(Context.getInstance().getTarget());
             }
         });
         

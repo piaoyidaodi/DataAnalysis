@@ -12,7 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import cc.comac.data.DataPreProcess;
+import cc.comac.controller.WestPaneDirTreeController;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
@@ -29,21 +29,16 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.init();
                 fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files(.txt)","txt"));
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTarget()));
                 //TODO Choose Target Data
                 int result=fileChooserDialog.showOpenDialog(parent);
                 
                 if(result==JFileChooser.APPROVE_OPTION){
-                    Context.getInstance().setTargetFile(fileChooserDialog.getSelectedFile().getAbsolutePath());
-                    EventQueue.invokeLater(new Runnable() {
-                        
-                        @Override
-                        public void run() {
-                            DataPreProcess dataPreProcess=new DataPreProcess();
-                            dataPreProcess.initFile();
+                    Context.getInstance().setTarget(fileChooserDialog.getSelectedFile().getAbsolutePath());
+                    WestPaneDirTreeController.getInstance().updateDataModel();
+//                    DataPreProcess dataPreProcess=new DataPreProcess();
+//                    dataPreProcess.initFile();
                             
-                        }
-                    });
                 }
                     
             }
@@ -62,25 +57,18 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.init();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTarget()));
                 //TODO Choose Dialog
                 int result=fileChooserDialog.showOpenDialog(parent);
                 
                 if(result==JFileChooser.APPROVE_OPTION){
-                    Context.getInstance().setWorkSpace(fileChooserDialog.getSelectedFile().getAbsolutePath());
-                    EventQueue.invokeLater(new Runnable() {
-                        
-                        @Override
-                        public void run() {
-                            DataPreProcess dataPreProcess=new DataPreProcess();
-                            dataPreProcess.initDirectory();
+                    Context.getInstance().setTarget(fileChooserDialog.getSelectedFile().getAbsolutePath());
+                    WestPaneDirTreeController.getInstance().updateDataModel();
                             
-                        }
-                    });
                 }
             }
         };
@@ -118,7 +106,7 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.init();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getWorkSpace()));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTarget()));
                 
                 fileChooserDialog.showSaveDialog(parent);
 
