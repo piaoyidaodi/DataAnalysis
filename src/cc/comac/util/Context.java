@@ -14,7 +14,8 @@ public class Context {
 
     private boolean firstUse;
     private String theme=null;
-    private String workSpace;
+    private String workSpace=null;
+    private String targetLabel=null;
     private MainFrameMenu mainFrameMenu=null;
     private MainFrameToolbar mainFrameToolbar=null;
     private MainFrameCenterPane mainFrameCenterPane=null;
@@ -51,7 +52,6 @@ public class Context {
         File workSpaceFile=new File(workSpace);
         if (workSpaceFile.exists()&&workSpaceFile.isDirectory()){
             if (!(workSpaceFile.getName().matches("\\d{8}"))) {
-//                System.out.println(workSpaceFile.getName()+"+ Error");
                 return;
             }
         }
@@ -121,5 +121,12 @@ public class Context {
         this.mainPane = mainPane;
     }
 
-    
+    public String getTargetLabel() {
+        return targetLabel;
+    }
+
+    public void setTargetLabel(String targetLabel) {
+        this.targetLabel = targetLabel;
+    }
+
 }

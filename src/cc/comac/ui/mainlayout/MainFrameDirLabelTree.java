@@ -1,17 +1,20 @@
 package cc.comac.ui.mainlayout;
 
 import java.io.File;
-import java.util.HashMap;
-
 import javax.swing.JComponent;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+
+import cc.comac.util.Context;
 
 public class MainFrameDirLabelTree extends JTree {
     private String workSpace=null;
     private DefaultTreeModel dTreeModel=null;
-    private HashMap<String, File> name2File=null;
+
     
     public MainFrameDirLabelTree() {
         super();
@@ -24,29 +27,42 @@ public class MainFrameDirLabelTree extends JTree {
     
     public void initTreeModel(JComponent parent){
         
-        name2File=new HashMap<>();
         File workSpaceFile = new File(this.workSpace);
-        name2File.put(workSpaceFile.getName(),workSpaceFile);
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode(workSpaceFile.getName()+"(WorkSpace)");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(workSpaceFile);
 
         this.loopBuildTree(workSpaceFile, root);
         this.dTreeModel = new DefaultTreeModel(root);
         this.dTreeModel.setAsksAllowsChildren(true);
 
         this.setModel(dTreeModel);
+        this.addTreeSelectionListener(new TreeSelectionListener() {
+            
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                TreePath path=e.getPath();
+                String pathString=path.toString();
+                StringBuilder targetLabelPath=new StringBuilder();
+                String targetPathString=pathString.substring(1, pathString.length()-1);
+                String[] targetLabelPieces=targetPathString.split(",");
+                for (String part : targetLabelPieces) {
+                    part=part.trim();
+                    if (part.contains(".")) {
+                        targetLabelPath.append(part);
+                    }else{
+                        targetLabelPath.append(part).append(File.separator);
+                    }
+                }
+                System.out.println(targetLabelPath.toString());
+                Context.getInstance().setTargetLabel(targetLabelPath.toString());
+            }
+        });
     }
     
     private void loopBuildTree(File dir, DefaultMutableTreeNode parent) {
         File[] fileList = dir.listFiles();
 
         for (File subFile : fileList) {
-            if (!name2File.containsKey(subFile.getAbsolutePath().substring(this.workSpace.length()+1)))
-                name2File.put(subFile.getAbsolutePath().substring(this.workSpace.length()+1),subFile);
-            else {
-                System.out.println(subFile.getAbsolutePath().substring(this.workSpace.length()+1)+"   "+subFile.getAbsolutePath());
-                System.out.println(subFile.getAbsolutePath().substring(this.workSpace.length()+1)+"   "+name2File.get(subFile.getName()));
-            }
             if (subFile.isDirectory()) {
                 DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),true);
                 parent.add(defaultMutableTreeNode);

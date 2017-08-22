@@ -47,8 +47,7 @@ public class DefaultMainFrameWestPane extends JTabbedPane {
     }
     
     public void update(JSplitPane mainPane) {
-        this.removeAll();
-        
+                
         init(mainPane);
         
     }
