@@ -1,10 +1,13 @@
 package cc.comac.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
 import cc.comac.data.DataPreProcess;
+import cc.comac.data.LabelDataProcessRunnable;
+import cc.comac.data.TargetDataPair;
 import cc.comac.util.Context;
 
 public class WestPaneDirTreeController implements Controller{
@@ -46,7 +49,19 @@ public class WestPaneDirTreeController implements Controller{
             }
         }
         
-
+    }
+    
+    public void updateLabelFileModel(){
+        String targetLabelZipFilePath=Context.getInstance().getTargetLabel();
+        LabelDataProcessRunnable labelDataProcess=new LabelDataProcessRunnable(targetLabelZipFilePath);
+        new Thread(labelDataProcess).start();
+                
+    }
+    
+    public void updateContext(TargetDataPair pair){
+        ArrayList<TargetDataPair> arrayList=Context.getInstance().getTargetDataPairs();
+        arrayList.add(pair);
+        arrayList.toString();
     }
 
 }

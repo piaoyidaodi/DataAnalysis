@@ -47,9 +47,7 @@ public class DefaultMainFrameWestPane extends JTabbedPane {
     }
     
     public void update(JSplitPane mainPane) {
-                
         init(mainPane);
-        
     }
     private String getNameNoPFix(File file){
         if (!file.isDirectory())

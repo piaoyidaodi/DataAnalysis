@@ -1,10 +1,12 @@
 package cc.comac.util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.swing.JSplitPane;
 
+import cc.comac.data.TargetDataPair;
 import cc.comac.ui.mainlayout.MainFrameCenterPane;
 import cc.comac.ui.mainlayout.MainFrameWestPane;
 import cc.comac.ui.menu.MainFrameMenu;
@@ -23,8 +25,8 @@ public class Context {
     private JSplitPane mainPane=null;
     private final int SETSIZE=5;
     
-
     private HashSet<String> workSpaceTreeHashSet=new HashSet<>();
+    private ArrayList<TargetDataPair> targetDataPairs=new ArrayList<>();
 
     private Context(){}
     
@@ -43,7 +45,7 @@ public class Context {
         this.firstUse = firstUse;
     }
 
-    public String getTarget() {
+    public String getTargetDir() {
         return workSpace;
     }
 
@@ -127,6 +129,14 @@ public class Context {
 
     public void setTargetLabel(String targetLabel) {
         this.targetLabel = targetLabel;
+    }
+
+    public ArrayList<TargetDataPair> getTargetDataPairs() {
+        return targetDataPairs;
+    }
+
+    public void setTargetDataPairs(ArrayList<TargetDataPair> targetDataPairs) {
+        this.targetDataPairs = targetDataPairs;
     }
 
 }

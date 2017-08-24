@@ -1,5 +1,8 @@
 package cc.comac.ui.mainlayout;
 
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -9,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import cc.comac.ui.popupmenu.DefaultWestPanePopupMenu;
 import cc.comac.util.Context;
 
 public class MainFrameDirLabelTree extends JTree {
@@ -36,6 +40,22 @@ public class MainFrameDirLabelTree extends JTree {
         this.dTreeModel.setAsksAllowsChildren(true);
 
         this.setModel(dTreeModel);
+        this.addListener();
+    }
+    
+    private void addListener(){
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if ((e.getModifiersEx()&InputEvent.BUTTON3_DOWN_MASK)!=0) {
+                    DefaultWestPanePopupMenu menu=new DefaultWestPanePopupMenu(MainFrameDirLabelTree.this);
+                    menu.show(MainFrameDirLabelTree.this, e.getX(), e.getY());
+                }
+
+            }
+        });
+
         this.addTreeSelectionListener(new TreeSelectionListener() {
             
             @Override
@@ -57,6 +77,7 @@ public class MainFrameDirLabelTree extends JTree {
                 Context.getInstance().setTargetLabel(targetLabelPath.toString());
             }
         });
+
     }
     
     private void loopBuildTree(File dir, DefaultMutableTreeNode parent) {

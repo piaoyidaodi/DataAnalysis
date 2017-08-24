@@ -57,4 +57,16 @@ public class MenuItemsFactory {
         return menuItem;
     }
 
+    public static JMenuItem getDrawItem(JComponent parent) {
+        menuItem=new JMenuItem(ActionFactory.getDrawAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt R"));
+        return menuItem;
+    }
+
+    public static JMenuItem getOpenInExplorerItem(JComponent parent) {
+        menuItem=new JMenuItem(ActionFactory.getOpenInExplorerAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt P"));
+        return menuItem;
+    }
+
 }

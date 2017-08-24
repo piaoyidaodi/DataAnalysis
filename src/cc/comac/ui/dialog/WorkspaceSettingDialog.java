@@ -159,7 +159,7 @@ public class WorkspaceSettingDialog extends JFrame {
                     Context.getInstance().setTarget(specifyWkSpaceTxtField.getText());
                 }
                 
-                System.out.println(Context.getInstance().getTarget());
+                System.out.println(Context.getInstance().getTargetDir());
             }
         });
         

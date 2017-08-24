@@ -1,9 +1,11 @@
 package cc.comac.util;
 
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -29,7 +31,7 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.init();
                 fileChooserDialog.setFileFilter(new FileNameExtensionFilter("Data Files(.txt)","txt"));
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTarget()));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTargetDir()));
                 //TODO Choose Target Data
                 int result=fileChooserDialog.showOpenDialog(parent);
                 
@@ -61,8 +63,7 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.init();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTarget()));
-                //TODO Choose Dialog
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTargetDir()));
                 int result=fileChooserDialog.showOpenDialog(parent);
                 
                 if(result==JFileChooser.APPROVE_OPTION){
@@ -106,7 +107,7 @@ public class ActionFactory {
                 FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
                 fileChooserDialog.init();
                 fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTarget()));
+                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTargetDir()));
                 
                 fileChooserDialog.showSaveDialog(parent);
 
@@ -208,6 +209,45 @@ public class ActionFactory {
         };
         action.putValue(Action.NAME, "Setting WorkSpace");
         action.putValue(Action.SHORT_DESCRIPTION, "Set WorkSpace");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_W);
+        return action;
+    }
+
+    public static AbstractAction getDrawAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //update draw action
+                
+            }
+        };
+        action.putValue(Action.NAME, "Draw");
+        action.putValue(Action.SHORT_DESCRIPTION, "Graphics For Data");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
+        return action;
+    }
+
+    public static AbstractAction getOpenInExplorerAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String targetLabel=Context.getInstance().getTargetLabel();
+                File targetLabelParentDirFile=new File(targetLabel).getParentFile();
+                if (Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                    try {
+                        Desktop.getDesktop().open(targetLabelParentDirFile);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        };
+        action.putValue(Action.NAME, "Open In Explorer");
+        action.putValue(Action.SHORT_DESCRIPTION, "Open In Explorer");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_W);
         return action;

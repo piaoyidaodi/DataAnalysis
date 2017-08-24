@@ -1,5 +1,8 @@
 package cc.comac.ui.mainlayout;
 
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -9,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import cc.comac.ui.popupmenu.DefaultWestPanePopupMenu;
 import cc.comac.util.Context;
 
 public class MainFrameFileLabelTree extends JTree {
@@ -42,6 +46,37 @@ public class MainFrameFileLabelTree extends JTree {
         this.dTreeModel.setAsksAllowsChildren(true);
 
         this.setModel(dTreeModel);
+        this.addListener();
+    }
+    
+    private void loopBuildTree(File dir, DefaultMutableTreeNode parent) {
+        File[] fileList = dir.listFiles();
+
+        for (File subFile : fileList) {
+            if (subFile.isDirectory()) {
+                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),true);
+                parent.add(defaultMutableTreeNode);
+                loopBuildTree(subFile, defaultMutableTreeNode);
+            }
+            else{
+                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),false);
+                parent.add(defaultMutableTreeNode);
+            }
+        }
+    }
+    
+    private void addListener(){
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if ((e.getModifiersEx()&InputEvent.BUTTON3_DOWN_MASK)!=0) {
+                    DefaultWestPanePopupMenu menu=new DefaultWestPanePopupMenu(MainFrameFileLabelTree.this);
+                    menu.show(MainFrameFileLabelTree.this, e.getX(), e.getY());
+                }
+
+            }
+        });
+
         this.addTreeSelectionListener(new TreeSelectionListener() {
             
             @Override
@@ -63,22 +98,7 @@ public class MainFrameFileLabelTree extends JTree {
                 Context.getInstance().setTargetLabel(targetLabelPath.toString());
             }
         });
-    }
-    
-    private void loopBuildTree(File dir, DefaultMutableTreeNode parent) {
-        File[] fileList = dir.listFiles();
 
-        for (File subFile : fileList) {
-            if (subFile.isDirectory()) {
-                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),true);
-                parent.add(defaultMutableTreeNode);
-                loopBuildTree(subFile, defaultMutableTreeNode);
-            }
-            else{
-                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),false);
-                parent.add(defaultMutableTreeNode);
-            }
-        }
     }
     
     private String getNameNoPFix(File file){
