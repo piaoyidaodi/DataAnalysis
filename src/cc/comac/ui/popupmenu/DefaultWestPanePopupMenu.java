@@ -7,7 +7,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import cc.comac.ui.menu.MenuItemsFactory;
-import cc.comac.util.Context;
 
 public class DefaultWestPanePopupMenu extends JPopupMenu {
     

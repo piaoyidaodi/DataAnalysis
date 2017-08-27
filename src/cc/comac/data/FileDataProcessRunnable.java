@@ -15,7 +15,7 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import cc.comac.controller.WestPaneDirTreeController;
+import cc.comac.controller.WestPaneTreeController;
 
 public class FileDataProcessRunnable implements Runnable{
     
@@ -30,7 +30,7 @@ public class FileDataProcessRunnable implements Runnable{
     
     public void run(){
         doProcess();
-        WestPaneDirTreeController.getInstance().updateUI();
+        WestPaneTreeController.getInstance().updateUI();
         
     }
     

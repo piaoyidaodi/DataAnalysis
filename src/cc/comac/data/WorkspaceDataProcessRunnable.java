@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import cc.comac.controller.WestPaneDirTreeController;
+import cc.comac.controller.WestPaneTreeController;
 
 public class WorkspaceDataProcessRunnable implements Runnable{
 
@@ -20,7 +20,7 @@ public class WorkspaceDataProcessRunnable implements Runnable{
     
     public void run(){
         initWorkSpace();
-        WestPaneDirTreeController.getInstance().updateUI();
+        WestPaneTreeController.getInstance().updateUI();
 
     }
     

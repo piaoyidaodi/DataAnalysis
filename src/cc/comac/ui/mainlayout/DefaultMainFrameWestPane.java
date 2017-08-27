@@ -16,19 +16,16 @@ public class DefaultMainFrameWestPane extends JTabbedPane {
     private HashSet<String> workSpaces=null;
     private HashMap<File, JTree> file2Tree=new HashMap<>();
     
-    public DefaultMainFrameWestPane() {
-        super();
-    }
+    public DefaultMainFrameWestPane() {}
 
     public DefaultMainFrameWestPane(JSplitPane mainPane) {
-        super();
-        
         init(mainPane);
     }
     
     public void init(JSplitPane mainPane) {
         this.removeAll();
         workSpaces=Context.getInstance().getWorkSpaceTreeSet();
+        this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         for (String workSpace : workSpaces) {
             File file=new File(workSpace);
             JTree targeTree=null;

@@ -12,6 +12,7 @@ import cc.comac.ui.mainlayout.MainFrameWestPane;
 import cc.comac.ui.menu.MainFrameMenu;
 import cc.comac.ui.toolbar.MainFrameToolbar;
 import cc.comac.util.Context;
+import cc.comac.util.DeviceProperty;
 
 public class MainFrame extends JFrame {
     
@@ -41,11 +42,14 @@ public class MainFrame extends JFrame {
 //        mainSplitPane.setLeftComponent(tabbedPane);
         mainSplitPane.setRightComponent(centerPane);
         mainSplitPane.setDividerSize(5);
+        mainSplitPane.setDividerLocation(0.25);
         
         add(menu);
         add(toolbar,BorderLayout.NORTH);
         add(mainSplitPane,BorderLayout.CENTER);
         
+//        this.setLocation((int)(DeviceProperty.getDeviceWidth()*0.1), (int)(DeviceProperty.getDeviceHeight()*0.1));
+//        this.setSize((int)(DeviceProperty.getDeviceWidth()*0.75), (int)(DeviceProperty.getDeviceHeight()*0.75));
     }
 
     public static void main(String[] args) {
@@ -57,8 +61,8 @@ public class MainFrame extends JFrame {
                 JFrame frame = new MainFrame();
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 frame.setTitle("MainFrame");
-                frame.setLocationByPlatform(true);
-                frame.pack();
+                frame.setLocation((int)(DeviceProperty.getDeviceWidth()*0.1), (int)(DeviceProperty.getDeviceHeight()*0.1));
+                frame.setSize((int)(DeviceProperty.getDeviceWidth()*0.75), (int)(DeviceProperty.getDeviceHeight()*0.75));
                 frame.setVisible(true);
                 
 

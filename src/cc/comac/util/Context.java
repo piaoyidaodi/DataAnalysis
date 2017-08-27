@@ -2,10 +2,12 @@ package cc.comac.util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.swing.JSplitPane;
 
+import cc.comac.controller.DrawPanelController;
 import cc.comac.data.TargetDataPair;
 import cc.comac.ui.mainlayout.MainFrameCenterPane;
 import cc.comac.ui.mainlayout.MainFrameWestPane;
@@ -17,16 +19,20 @@ public class Context {
     private boolean firstUse;
     private String theme=null;
     private String workSpace=null;
-    private String targetLabel=null;
+    private String targetLabelZipFilePath=null;
     private MainFrameMenu mainFrameMenu=null;
     private MainFrameToolbar mainFrameToolbar=null;
+    private JSplitPane mainSplitPane=null;
     private MainFrameCenterPane mainFrameCenterPane=null;
     private MainFrameWestPane mainFrameWestPane=null;
     private JSplitPane mainPane=null;
     private final int SETSIZE=5;
     
     private HashSet<String> workSpaceTreeHashSet=new HashSet<>();
+    private HashSet<String> targetZipFileSet=new HashSet<>();
     private ArrayList<TargetDataPair> targetDataPairs=new ArrayList<>();
+    private HashMap<String, Boolean> drawNote=new HashMap<>();
+    private HashMap<String, DrawPanelController> drawPanelController=new HashMap<>();
 
     private Context(){}
     
@@ -46,6 +52,7 @@ public class Context {
     }
 
     public String getTargetDir() {
+        if (workSpace==null) workSpace=DeviceProperty.getDefaultWkDir();
         return workSpace;
     }
 
@@ -123,12 +130,12 @@ public class Context {
         this.mainPane = mainPane;
     }
 
-    public String getTargetLabel() {
-        return targetLabel;
+    public String getTargetLabelZipFilePath() {
+        return targetLabelZipFilePath;
     }
 
-    public void setTargetLabel(String targetLabel) {
-        this.targetLabel = targetLabel;
+    public void setTargetLabelZipFilePath(String targetLabel) {
+        this.targetLabelZipFilePath = targetLabel;
     }
 
     public ArrayList<TargetDataPair> getTargetDataPairs() {
@@ -137,6 +144,26 @@ public class Context {
 
     public void setTargetDataPairs(ArrayList<TargetDataPair> targetDataPairs) {
         this.targetDataPairs = targetDataPairs;
+    }
+    
+    public HashSet<String> getTargetZipFileSet() {
+        return targetZipFileSet;
+    }
+
+    public void setTargetZipFileSet(HashSet<String> targetZipFileSet) {
+        this.targetZipFileSet = targetZipFileSet;
+    }
+
+    public HashMap<String, Boolean> getDrawNote() {
+        return drawNote;
+    }
+
+    public HashMap<String, DrawPanelController> getDrawPanelController() {
+        return drawPanelController;
+    }
+
+    public JSplitPane getMainSplitPane() {
+        return mainSplitPane;
     }
 
 }

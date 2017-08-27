@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -14,7 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import cc.comac.controller.WestPaneDirTreeController;
+import cc.comac.controller.WestPaneTreeController;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
@@ -37,10 +36,9 @@ public class ActionFactory {
                 
                 if(result==JFileChooser.APPROVE_OPTION){
                     Context.getInstance().setTarget(fileChooserDialog.getSelectedFile().getAbsolutePath());
-                    WestPaneDirTreeController.getInstance().updateDataModel();
+                    WestPaneTreeController.getInstance().updateDataModel();
 //                    DataPreProcess dataPreProcess=new DataPreProcess();
 //                    dataPreProcess.initFile();
-                            
                 }
                     
             }
@@ -68,7 +66,7 @@ public class ActionFactory {
                 
                 if(result==JFileChooser.APPROVE_OPTION){
                     Context.getInstance().setTarget(fileChooserDialog.getSelectedFile().getAbsolutePath());
-                    WestPaneDirTreeController.getInstance().updateDataModel();
+                    WestPaneTreeController.getInstance().updateDataModel();
                             
                 }
             }
@@ -219,8 +217,7 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                //update draw action
-                
+                WestPaneTreeController.getInstance().updateLabelFileModel();
             }
         };
         action.putValue(Action.NAME, "Draw");
@@ -235,7 +232,7 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targetLabel=Context.getInstance().getTargetLabel();
+                String targetLabel=Context.getInstance().getTargetLabelZipFilePath();
                 File targetLabelParentDirFile=new File(targetLabel).getParentFile();
                 if (Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
                     try {

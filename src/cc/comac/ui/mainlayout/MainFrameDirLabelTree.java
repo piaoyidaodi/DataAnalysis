@@ -43,6 +43,24 @@ public class MainFrameDirLabelTree extends JTree {
         this.addListener();
     }
     
+    private void loopBuildTree(File dir, DefaultMutableTreeNode parent) {
+        File[] fileList = dir.listFiles();
+
+        for (File subFile : fileList) {
+            if (subFile.isDirectory()) {
+                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),true);
+                parent.add(defaultMutableTreeNode);
+                loopBuildTree(subFile, defaultMutableTreeNode);
+            }
+            else{
+                if(subFile.getName().endsWith(".zip")||subFile.getName().endsWith(".md")){
+                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),false);
+                parent.add(defaultMutableTreeNode);
+                }
+            }
+        }
+    }
+    
     private void addListener(){
         
         this.addMouseListener(new MouseAdapter() {
@@ -74,26 +92,11 @@ public class MainFrameDirLabelTree extends JTree {
                     }
                 }
                 System.out.println(targetLabelPath.toString());
-                Context.getInstance().setTargetLabel(targetLabelPath.toString());
+                Context.getInstance().setTargetLabelZipFilePath(targetLabelPath.toString());
             }
         });
 
     }
     
-    private void loopBuildTree(File dir, DefaultMutableTreeNode parent) {
-        File[] fileList = dir.listFiles();
-
-        for (File subFile : fileList) {
-            if (subFile.isDirectory()) {
-                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),true);
-                parent.add(defaultMutableTreeNode);
-                loopBuildTree(subFile, defaultMutableTreeNode);
-            }
-            else{
-                DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),false);
-                parent.add(defaultMutableTreeNode);
-            }
-        }
-    }
     
 }

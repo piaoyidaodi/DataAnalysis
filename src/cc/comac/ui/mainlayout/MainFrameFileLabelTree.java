@@ -59,8 +59,10 @@ public class MainFrameFileLabelTree extends JTree {
                 loopBuildTree(subFile, defaultMutableTreeNode);
             }
             else{
+                if(subFile.getName().endsWith(".zip")||subFile.getName().endsWith(".md")){
                 DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(subFile.getName(),false);
                 parent.add(defaultMutableTreeNode);
+                }
             }
         }
     }
@@ -95,7 +97,7 @@ public class MainFrameFileLabelTree extends JTree {
                     }
                 }
                 System.out.println(targetLabelPath.toString());
-                Context.getInstance().setTargetLabel(targetLabelPath.toString());
+                Context.getInstance().setTargetLabelZipFilePath(targetLabelPath.toString());
             }
         });
 

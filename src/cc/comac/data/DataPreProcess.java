@@ -2,7 +2,7 @@ package cc.comac.data;
 
 import java.io.File;
 
-import cc.comac.controller.WestPaneDirTreeController;
+import cc.comac.controller.WestPaneTreeController;
 
 public class DataPreProcess {
 
@@ -22,7 +22,7 @@ public class DataPreProcess {
             if (file.isDirectory()&&file.getName().equals(getNameNoPFix(targetFile))) {
                 isProcessed=true;
                 System.out.println(targetFile.getAbsolutePath()+" File Processed");
-                WestPaneDirTreeController.getInstance().updateUI();
+                WestPaneTreeController.getInstance().updateUI();
             }
         }
         if (!isProcessed) {
@@ -43,7 +43,7 @@ public class DataPreProcess {
             if (file.getName().equals("markFile.md")) {
                 isProcessed=true;
                 System.out.println(workSpaceFile.getAbsolutePath()+" Directory Processed");
-                WestPaneDirTreeController.getInstance().updateUI();
+                WestPaneTreeController.getInstance().updateUI();
             }
         }
         if (!isProcessed) {

@@ -1,13 +1,12 @@
 package cc.comac.ui.mainlayout;
 
-import javax.swing.JComponent;
+import javax.swing.JSplitPane;
 
 public class MainFrameCenterPane extends DefaultMainFrameCenterPane {
 
-    public MainFrameCenterPane() {
-        super();
-    }
-    public MainFrameCenterPane(JComponent parent){
-        super(parent);
+    public MainFrameCenterPane() {}
+    
+    public MainFrameCenterPane(JSplitPane mainPane){
+        super(mainPane);
     }
 }

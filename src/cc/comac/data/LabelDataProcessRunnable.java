@@ -7,15 +7,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import cc.comac.controller.WestPaneDirTreeController;
+import cc.comac.controller.WestPaneTreeController;
 
 public class LabelDataProcessRunnable implements Runnable{
     
     private String targetLabelZipFilePath=null;
-
+    private HashSet<String> targetZipFileSet=null;
     private String[] timeLabelValue=null;
     private Double[] dataLabelValue=null;
     private TargetDataPair targetDataPair=null;
@@ -41,6 +42,7 @@ public class LabelDataProcessRunnable implements Runnable{
     }
 
     public void init(){
+        
         if (targetLabelZipFilePath==null) {
             //TODO pop out error
             return;
@@ -61,7 +63,7 @@ public class LabelDataProcessRunnable implements Runnable{
         readLabelData(targetLabelJBinFile);
         readTimeData(targetTimeJBinFile);
         targetDataPair=new TargetDataPair(targetLabelZipFilePath,timeLabelValue,dataLabelValue);
-        WestPaneDirTreeController.getInstance().updateContext(targetDataPair);
+        WestPaneTreeController.getInstance().updateContext(targetDataPair);
         
     }
     private void readTimeData(File targetTimeJBinFile) {
