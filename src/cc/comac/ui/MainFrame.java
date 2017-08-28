@@ -30,19 +30,19 @@ public class MainFrame extends JFrame {
         centerPane=new MainFrameCenterPane(mainSplitPane);
         westPane=new MainFrameWestPane(mainSplitPane);
         
+        Context.getInstance().setMainFrame(this);
         Context.getInstance().setMainFrameMenu(menu);
         Context.getInstance().setMainFrameToolbar(toolbar);
         Context.getInstance().setMainFrameWestPane(westPane);
         Context.getInstance().setMainFrameCenterPane(centerPane);
         Context.getInstance().setMainPane(mainSplitPane);
         
-        
         // MainSplitPane
         mainSplitPane.setLeftComponent(westPane);
 //        mainSplitPane.setLeftComponent(tabbedPane);
         mainSplitPane.setRightComponent(centerPane);
         mainSplitPane.setDividerSize(5);
-        mainSplitPane.setDividerLocation(0.25);
+        mainSplitPane.setDividerLocation(150);
         
         add(menu);
         add(toolbar,BorderLayout.NORTH);

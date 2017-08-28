@@ -2,6 +2,8 @@ package cc.comac.ui.mainlayout;
 
 import java.io.File;
 import java.util.HashMap;
+
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
@@ -24,20 +26,34 @@ public class DefaultMainFrameCenterPane extends JTabbedPane {
     
     public void init(JSplitPane mainPane,String targetLabelZipFilePath,TargetDataPair pair){
         DrawPanelController controller=new DrawPanelController(mainPane,targetLabelZipFilePath,pair);
-        DataDrawPanel panel=new DataDrawPanel(targetLabelZipFilePath,controller);
-        //change new Jpanel to drawPanel
-        this.addTab(targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1), panel);
-        drawPanelController.put(targetLabelZipFilePath, controller);
-        drawNote.put(targetLabelZipFilePath, true);
+        initUI(mainPane,targetLabelZipFilePath,controller,pair);
+        
     }
 
     public void update(JSplitPane mainPane,String targetLabelZipFilePath,TargetDataPair pair){
         DrawPanelController controller=drawPanelController.get(targetLabelZipFilePath);
-        DataDrawPanel panel=new DataDrawPanel(targetLabelZipFilePath,controller);
+        initUI(mainPane,targetLabelZipFilePath,controller,pair);
+    }
+    
+    private void initUI(JSplitPane mainPane,String targetLabelZipFilePath,DrawPanelController controller,TargetDataPair pair){
+        DataSplitPane dataSplitPane=new DataSplitPane();
+        
+        DataDrawPanel datapanel=new DataDrawPanel(dataSplitPane,targetLabelZipFilePath,controller);
+        
+        DataTable datatable=new DataTable(dataSplitPane,controller);
+        JScrollPane scrollPane=new JScrollPane(datatable);
+        
+        dataSplitPane.add(datapanel);
+        dataSplitPane.add(scrollPane);
+        dataSplitPane.resetToPreferredSizes();
+        
+        
         //change new Jpanel to drawPanel
-        this.addTab(targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1), panel);
+        this.addTab(targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1), dataSplitPane);
         drawPanelController.put(targetLabelZipFilePath, controller);
         drawNote.put(targetLabelZipFilePath, true);
+        Context.getInstance().getMainFrame().pack();
+        
     }
 
 }

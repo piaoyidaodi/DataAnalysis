@@ -9,6 +9,7 @@ import javax.swing.JSplitPane;
 
 import cc.comac.controller.DrawPanelController;
 import cc.comac.data.TargetDataPair;
+import cc.comac.ui.MainFrame;
 import cc.comac.ui.mainlayout.MainFrameCenterPane;
 import cc.comac.ui.mainlayout.MainFrameWestPane;
 import cc.comac.ui.menu.MainFrameMenu;
@@ -20,6 +21,7 @@ public class Context {
     private String theme=null;
     private String workSpace=null;
     private String targetLabelZipFilePath=null;
+    private MainFrame mainFrame=null;
     private MainFrameMenu mainFrameMenu=null;
     private MainFrameToolbar mainFrameToolbar=null;
     private JSplitPane mainSplitPane=null;
@@ -164,6 +166,14 @@ public class Context {
 
     public JSplitPane getMainSplitPane() {
         return mainSplitPane;
+    }
+
+    public MainFrame getMainFrame() {
+        return mainFrame;
+    }
+    
+    public void setMainFrame(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
     }
 
 }

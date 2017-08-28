@@ -1,5 +1,7 @@
 package cc.comac.controller;
 
+import java.io.File;
+
 import javax.swing.JSplitPane;
 
 import cc.comac.data.TargetDataPair;
@@ -8,6 +10,7 @@ import cc.comac.util.Functions;
 public class DrawPanelController {
     
     private String targetLabelZipFilePath=null;
+    private String targetLabelZipFileName=null;
     private String[] timeLabelValue=null;
     private Double[] dataLabelValue=null;
     private int rangeXMin;
@@ -17,6 +20,7 @@ public class DrawPanelController {
 
     public DrawPanelController(JSplitPane mainPane,String targetLabelZipFilePath,TargetDataPair pair) {
         this.targetLabelZipFilePath=targetLabelZipFilePath;
+        this.targetLabelZipFileName=targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1,targetLabelZipFilePath.lastIndexOf("."));
         this.timeLabelValue=pair.getTimeLabelValue();
         this.dataLabelValue=pair.getDataLabelValue();
         this.rangeXMin=0;
@@ -34,6 +38,10 @@ public class DrawPanelController {
     
     public String getTargetLabelZipFilePath() {
         return targetLabelZipFilePath;
+    }
+    
+    public String getTargetLabelZipFileName() {
+        return targetLabelZipFileName;
     }
 
     public int getRangeXMin() {
@@ -67,5 +75,14 @@ public class DrawPanelController {
     public void setRangeYMax(double rangeYMax) {
         this.rangeYMax = rangeYMax;
     }
+    
+    public String[] getTimeLabelValue() {
+        return timeLabelValue;
+    }
+
+    public Double[] getDataLabelValue() {
+        return dataLabelValue;
+    }
+
 
 }
