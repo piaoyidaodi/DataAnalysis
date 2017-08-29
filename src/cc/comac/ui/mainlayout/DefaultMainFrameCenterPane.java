@@ -1,5 +1,6 @@
 package cc.comac.ui.mainlayout;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.util.HashMap;
 
@@ -39,21 +40,19 @@ public class DefaultMainFrameCenterPane extends JTabbedPane {
         DataSplitPane dataSplitPane=new DataSplitPane();
         
         DataDrawPanel datapanel=new DataDrawPanel(dataSplitPane,targetLabelZipFilePath,controller);
-        
         DataTable datatable=new DataTable(dataSplitPane,controller);
         JScrollPane scrollPane=new JScrollPane(datatable);
+        scrollPane.setMinimumSize(new Dimension(650, 200));
+        scrollPane.setPreferredSize(new Dimension(650, 200));
         
         dataSplitPane.add(datapanel);
         dataSplitPane.add(scrollPane);
         dataSplitPane.resetToPreferredSizes();
-        
-        
-        //change new Jpanel to drawPanel
         this.addTab(targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1), dataSplitPane);
         drawPanelController.put(targetLabelZipFilePath, controller);
         drawNote.put(targetLabelZipFilePath, true);
-        Context.getInstance().getMainFrame().pack();
-        
+        dataSplitPane.resetToPreferredSizes();
+
     }
 
 }

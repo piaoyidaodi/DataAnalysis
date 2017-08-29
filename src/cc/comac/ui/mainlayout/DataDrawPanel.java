@@ -18,7 +18,7 @@ public class DataDrawPanel extends BlankDataDrawPanel {
 
     private void init() {
         // Initial the DrawPanel
-        System.out.println("Draw"+targetLabelZipFilePath);
+        System.out.println("Draw "+targetLabelZipFilePath);
         
     }
 }

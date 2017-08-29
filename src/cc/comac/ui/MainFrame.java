@@ -1,6 +1,7 @@
 package cc.comac.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -62,10 +63,8 @@ public class MainFrame extends JFrame {
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 frame.setTitle("MainFrame");
                 frame.setLocation((int)(DeviceProperty.getDeviceWidth()*0.1), (int)(DeviceProperty.getDeviceHeight()*0.1));
-                frame.setSize((int)(DeviceProperty.getDeviceWidth()*0.75), (int)(DeviceProperty.getDeviceHeight()*0.75));
+                frame.setMinimumSize(new Dimension(920, 690));
                 frame.setVisible(true);
-                
-
             }
         });
     }

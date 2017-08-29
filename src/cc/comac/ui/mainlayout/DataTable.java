@@ -1,7 +1,5 @@
 package cc.comac.ui.mainlayout;
 
-import java.awt.Dimension;
-
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -13,13 +11,10 @@ public class DataTable extends JTable {
     private String[] timeLabelValue=null;
     private Double[] dataLabelValue=null;
     private DrawPanelController[] controllers=null;
-    private final int PREFER_WIDTH=700;
-    private final int PREFER_HEIGHT=300;
     
     public DataTable(DataSplitPane parent,DrawPanelController... controllers) {
         super();
         this.controllers=controllers;
-        this.setSize(new Dimension(PREFER_WIDTH, PREFER_HEIGHT));
         init();
     }
     private void init(){
