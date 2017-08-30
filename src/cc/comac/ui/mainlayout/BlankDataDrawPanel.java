@@ -24,16 +24,17 @@ public class BlankDataDrawPanel extends JPanel{
     private int panelLTY;
     private int panelWidth;
     private int panelHeiht;
-    
     private Point[] canvasPoints=new Point[4];
-    private int canvasOffset=30;
-    
-    private Point[] coordinatePoints=new Point[4];
-    private int coordinateOffset=30;
+    private int canvasGeneralOffset=10;
+    private int canvasSpecialOffset=35;
     
     private int xSpan=20;
     private int ySpan=10;
 
+    private Color panelBGColor=null;
+    private Color canvasBGColor=null;
+    private Color coordinateColor=null;
+    private Color scaleLineColor=null;
     
     public BlankDataDrawPanel(){
         super();
@@ -44,14 +45,18 @@ public class BlankDataDrawPanel extends JPanel{
         this.rangeXMax=1;
         this.rangeYMin=0;
         this.rangeYMax=1;
+        // Light Gray with alpha 0.8
+        this.panelBGColor=new Color(211,211,211,205);
+        this.canvasBGColor=Color.white;
+        this.coordinateColor=Color.darkGray;
+        this.scaleLineColor=new Color(100,149,237,150);
+        
+        this.setBackground(panelBGColor);
         this.setMinimumSize(new Dimension(650, 200));
         this.setPreferredSize(new Dimension(PREFER_WIDTH, PREFER_HEIGHT));
-        this.setBackground(Color.LIGHT_GRAY);
-        this.init();
+
     }
-    private void init(){
-    }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -67,48 +72,60 @@ public class BlankDataDrawPanel extends JPanel{
         float[] dashPattern={2.0F,2.0F,2.0F,2.0F};
         float miterLimit=10.0F;
         float dashPhase=0;
-        BasicStroke stroke=new BasicStroke(1.0F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, miterLimit, dashPattern, dashPhase);
+        BasicStroke stroke=new BasicStroke(1.0F, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, miterLimit, dashPattern, dashPhase);
         g2.setStroke(stroke);
-        g2.setColor(Color.blue);
+        g2.setColor(scaleLineColor);
         
-        int xX=coordinatePoints[0].x;
-        for(int x=xSpan;xX+x<coordinatePoints[2].x;x+=xSpan){
-            Line2D line=new Line2D.Double(new Point(xX+x,coordinatePoints[0].y), new Point(xX+x,coordinatePoints[1].y));
+        int xX=canvasPoints[0].x;
+        for(int x=xSpan;xX+x<canvasPoints[2].x;x+=xSpan){
+            Line2D line=new Line2D.Double(new Point(xX+x,canvasPoints[0].y), new Point(xX+x,canvasPoints[1].y));
             g2.draw(line);
         }
-        int yY=coordinatePoints[0].y;
-        for(int y=ySpan;yY+y<coordinatePoints[1].y;y+=ySpan){
-            Line2D line=new Line2D.Double(new Point(coordinatePoints[0].x,yY+y), new Point(coordinatePoints[2].x,yY+y));
+        int yY=canvasPoints[1].y;
+        for(int y=ySpan;yY-y>canvasPoints[0].y;y+=ySpan){
+            Line2D line=new Line2D.Double(new Point(canvasPoints[0].x,yY-y), new Point(canvasPoints[2].x,yY-y));
             g2.draw(line);
         }
     }
 
     protected void initCoordinate(Graphics2D g2) {
-        int offset=3;
+        int arrawOffset=3;
         g2.setColor(Color.gray);
-        Line2D topCoordLine=new Line2D.Double(coordinatePoints[0], coordinatePoints[2]);
-        Line2D rightCoordLine=new Line2D.Double(coordinatePoints[2],coordinatePoints[3]);
+        Line2D topCoordLine=new Line2D.Double(canvasPoints[0], canvasPoints[2]);
+        Line2D rightCoordLine=new Line2D.Double(canvasPoints[2],canvasPoints[3]);
         g2.draw(topCoordLine);
         g2.draw(rightCoordLine);
         
-        g2.setColor(Color.darkGray);
+        g2.setColor(coordinateColor);
         g2.setStroke(new BasicStroke(2.0F));
-        Line2D leftCoordLine=new Line2D.Double(coordinatePoints[0], coordinatePoints[1]);
-        Line2D BottomCoordLine=new Line2D.Double(coordinatePoints[1],coordinatePoints[3]);
-        Line2D arrowTop=new Line2D.Double(coordinatePoints[0], new Point(coordinatePoints[0].x+offset, coordinatePoints[0].y+offset));
-        Line2D arrowRight=new Line2D.Double(coordinatePoints[3], new Point(coordinatePoints[3].x-offset, coordinatePoints[3].y-offset));
+        Line2D leftCoordLine=new Line2D.Double(canvasPoints[0], canvasPoints[1]);
+        Line2D BottomCoordLine=new Line2D.Double(canvasPoints[1],canvasPoints[3]);
+        Line2D arrowTop=new Line2D.Double(canvasPoints[0], new Point(canvasPoints[0].x+arrawOffset, canvasPoints[0].y+arrawOffset));
+        Line2D arrowRight=new Line2D.Double(canvasPoints[3], new Point(canvasPoints[3].x-arrawOffset, canvasPoints[3].y-arrawOffset));
         g2.draw(leftCoordLine);
         g2.draw(BottomCoordLine);
         g2.draw(arrowTop);
         g2.draw(arrowRight);
         
-        //TODO Xcoordinate node every 3*xSpan pixels one;Ycoordinate node every 3*ySpan
+        int spotOffset=4;
+        int xCoordWidth=canvasPoints[2].x-canvasPoints[0].x;
+        int yCoordHeight=canvasPoints[1].y-canvasPoints[0].y;
+        int xSpeSpan=xCoordWidth/(5*xSpan)*xSpan;
+        int ySpeSpan=yCoordHeight/(5*ySpan)*ySpan;
+        for(int i=0;i<=xCoordWidth;i+=xSpeSpan){
+            Line2D spot=new Line2D.Double(new Point(canvasPoints[0].x+i, canvasPoints[1].y), new Point(canvasPoints[0].x+i, canvasPoints[1].y-spotOffset));
+            g2.draw(spot);
+        }
+        for(int i=canvasPoints[1].y;i>=0;i-=ySpeSpan){
+            Line2D spot=new Line2D.Double(new Point(canvasPoints[0].x, i), new Point(canvasPoints[0].x+spotOffset, i));
+            g2.draw(spot);
+        }
     }
 
     protected void initCanvas(Graphics2D g2) {
         Rectangle2D rectangle2d=new Rectangle2D.Double();
         rectangle2d.setFrameFromDiagonal(canvasPoints[0], canvasPoints[3]);
-        g2.setColor(Color.white);
+        g2.setColor(canvasBGColor);
         g2.fill(rectangle2d);
     }
 
@@ -116,7 +133,6 @@ public class BlankDataDrawPanel extends JPanel{
         for (int i=0;i<4;i++) {
             panelPoints[i]=this.getLocation();
             canvasPoints[i]=this.getLocation();
-            coordinatePoints[i]=this.getLocation();
         }
 
         panelLTX=this.getX();
@@ -129,15 +145,10 @@ public class BlankDataDrawPanel extends JPanel{
         panelPoints[2].setLocation(panelLTX+panelWidth, panelLTY);
         panelPoints[3].setLocation(panelLTX+panelWidth, panelLTY+panelHeiht);
         
-        canvasPoints[0].setLocation(panelLTX+canvasOffset, panelLTY+canvasOffset);
-        canvasPoints[1].setLocation(panelLTX+canvasOffset, panelLTY+panelHeiht-canvasOffset);
-        canvasPoints[2].setLocation(panelLTX+panelWidth-canvasOffset, panelLTY+canvasOffset);
-        canvasPoints[3].setLocation(panelLTX+panelWidth-canvasOffset, panelLTY+panelHeiht-canvasOffset);
-        
-        coordinatePoints[0].setLocation(panelLTX+coordinateOffset, panelLTY+coordinateOffset);
-        coordinatePoints[1].setLocation(panelLTX+coordinateOffset, panelLTY+panelHeiht-coordinateOffset);
-        coordinatePoints[2].setLocation(panelLTX+panelWidth-coordinateOffset, panelLTY+coordinateOffset);
-        coordinatePoints[3].setLocation(panelLTX+panelWidth-coordinateOffset, panelLTY+panelHeiht-coordinateOffset);
+        canvasPoints[0].setLocation(panelLTX+canvasSpecialOffset, panelLTY+canvasGeneralOffset);
+        canvasPoints[1].setLocation(panelLTX+canvasSpecialOffset, panelLTY+panelHeiht-canvasSpecialOffset);
+        canvasPoints[2].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+canvasGeneralOffset);
+        canvasPoints[3].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+panelHeiht-canvasSpecialOffset);
     }
 
     public int getRangeXMin() {

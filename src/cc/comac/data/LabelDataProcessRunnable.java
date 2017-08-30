@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -16,7 +15,6 @@ import cc.comac.controller.WestPaneTreeController;
 public class LabelDataProcessRunnable implements Runnable{
     
     private String targetLabelZipFilePath=null;
-    private HashSet<String> targetZipFileSet=null;
     private String[] timeLabelValue=null;
     private Double[] dataLabelValue=null;
     private TargetDataPair targetDataPair=null;

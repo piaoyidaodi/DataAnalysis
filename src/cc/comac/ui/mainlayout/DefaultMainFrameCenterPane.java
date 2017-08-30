@@ -47,6 +47,7 @@ public class DefaultMainFrameCenterPane extends JTabbedPane {
         
         dataSplitPane.add(datapanel);
         dataSplitPane.add(scrollPane);
+        dataSplitPane.setDividerSize(3);
         dataSplitPane.resetToPreferredSizes();
         this.addTab(targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1), dataSplitPane);
         drawPanelController.put(targetLabelZipFilePath, controller);

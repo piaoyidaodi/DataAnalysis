@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
         mainSplitPane.setLeftComponent(westPane);
 //        mainSplitPane.setLeftComponent(tabbedPane);
         mainSplitPane.setRightComponent(centerPane);
-        mainSplitPane.setDividerSize(5);
+        mainSplitPane.setDividerSize(3);
         mainSplitPane.setDividerLocation(150);
         
         add(menu);
