@@ -39,13 +39,13 @@ public class DefaultMainFrameCenterPane extends JTabbedPane {
     private void initUI(JSplitPane mainPane,String targetLabelZipFilePath,DrawPanelController controller,TargetDataPair pair){
         DataSplitPane dataSplitPane=new DataSplitPane();
         
-        DataDrawPanel datapanel=new DataDrawPanel(dataSplitPane,targetLabelZipFilePath,controller);
-        DataTable datatable=new DataTable(dataSplitPane,controller);
-        JScrollPane scrollPane=new JScrollPane(datatable);
-        scrollPane.setMinimumSize(new Dimension(650, 200));
+        DataDrawPanel dataDrawPanel=new DataDrawPanel(dataSplitPane,targetLabelZipFilePath,controller);
+        DataTable dataTable=new DataTable(dataSplitPane,controller);
+        JScrollPane scrollPane=new JScrollPane(dataTable);
+        scrollPane.setMinimumSize(new Dimension(650, 150));
         scrollPane.setPreferredSize(new Dimension(650, 200));
         
-        dataSplitPane.add(datapanel);
+        dataSplitPane.add(dataDrawPanel);
         dataSplitPane.add(scrollPane);
         dataSplitPane.setDividerSize(3);
         dataSplitPane.resetToPreferredSizes();

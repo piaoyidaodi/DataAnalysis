@@ -14,37 +14,38 @@ import javax.swing.JPanel;
 public class BlankDataDrawPanel extends JPanel{
     private final int PREFER_WIDTH=650;
     private final int PREFER_HEIGHT=400;
-    private int rangeXMin;
-    private int rangeXMax;
-    private double rangeYMin;
-    private double rangeYMax;
+    protected static int xSpanNum=8;
+    protected static int ySpanNum=6;
     
-    private Point[] panelPoints=new Point[4];
-    private int panelLTX;
-    private int panelLTY;
-    private int panelWidth;
-    private int panelHeiht;
-    private Point[] canvasPoints=new Point[4];
-    private int canvasGeneralOffset=10;
-    private int canvasSpecialOffset=35;
+    protected Point[] panelPoints=new Point[4];
+    protected int panelLTX;
+    protected int panelLTY;
+    protected int panelWidth;
+    protected int panelHeight;
     
-    private int xSpan=20;
-    private int ySpan=10;
+    protected Point[] canvasPoints=new Point[4];
+    protected int canvasGeneralOffset=10;
+    protected int canvasSpecialOffset=35;
+    protected int canvasWidth;
+    protected int canvasHeight;
+    
+    protected Point[] coordXPoints=new Point[xSpanNum];
+    protected Point[] coordYPoints=new Point[ySpanNum];
+    protected int xSpeSpan;
+    protected int ySpeSpan;
+    protected int xSpan;
+    protected int ySpan;
 
-    private Color panelBGColor=null;
-    private Color canvasBGColor=null;
-    private Color coordinateColor=null;
-    private Color scaleLineColor=null;
+    protected Color panelBGColor=null;
+    protected Color canvasBGColor=null;
+    protected Color coordinateColor=null;
+    protected Color scaleLineColor=null;
     
     public BlankDataDrawPanel(){
         super();
     }
     
     public BlankDataDrawPanel(DataSplitPane parent){
-        this.rangeXMin=0;
-        this.rangeXMax=1;
-        this.rangeYMin=0;
-        this.rangeYMax=1;
         // Light Gray with alpha 0.8
         this.panelBGColor=new Color(211,211,211,205);
         this.canvasBGColor=Color.white;
@@ -61,14 +62,14 @@ public class BlankDataDrawPanel extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2=(Graphics2D) g;
-        initPanelPoints();
+        initPoints();
         initCanvas(g2);
         initCoordinate(g2);
         initScale(g2);
 
     }
     
-    protected void initScale(Graphics2D g2) {
+    private void initScale(Graphics2D g2) {
         float[] dashPattern={2.0F,2.0F,2.0F,2.0F};
         float miterLimit=10.0F;
         float dashPhase=0;
@@ -76,6 +77,9 @@ public class BlankDataDrawPanel extends JPanel{
         g2.setStroke(stroke);
         g2.setColor(scaleLineColor);
         
+        this.xSpan=xSpeSpan/10;
+        this.ySpan=ySpeSpan/5;
+
         int xX=canvasPoints[0].x;
         for(int x=xSpan;xX+x<canvasPoints[2].x;x+=xSpan){
             Line2D line=new Line2D.Double(new Point(xX+x,canvasPoints[0].y), new Point(xX+x,canvasPoints[1].y));
@@ -88,7 +92,11 @@ public class BlankDataDrawPanel extends JPanel{
         }
     }
 
-    protected void initCoordinate(Graphics2D g2) {
+    private void initCoordinate(Graphics2D g2) {
+        /*
+        int xSpeSpan=(int)(xCoordWidth/(5.0*xSpan)+0.5)*xSpan;
+        int ySpeSpan=(int)(yCoordHeight/(5.0*ySpan)+0.5)*ySpan;
+        */
         int arrawOffset=3;
         g2.setColor(Color.gray);
         Line2D topCoordLine=new Line2D.Double(canvasPoints[0], canvasPoints[2]);
@@ -108,28 +116,35 @@ public class BlankDataDrawPanel extends JPanel{
         g2.draw(arrowRight);
         
         int spotOffset=4;
+        int loopindex=0;
         int xCoordWidth=canvasPoints[2].x-canvasPoints[0].x;
         int yCoordHeight=canvasPoints[1].y-canvasPoints[0].y;
-        int xSpeSpan=xCoordWidth/(5*xSpan)*xSpan;
-        int ySpeSpan=yCoordHeight/(5*ySpan)*ySpan;
+        this.xSpeSpan=xCoordWidth/8+1;
+        this.ySpeSpan=yCoordHeight/6+1;
+        
         for(int i=0;i<=xCoordWidth;i+=xSpeSpan){
             Line2D spot=new Line2D.Double(new Point(canvasPoints[0].x+i, canvasPoints[1].y), new Point(canvasPoints[0].x+i, canvasPoints[1].y-spotOffset));
+            coordXPoints[loopindex++]=new Point(canvasPoints[0].x+i, canvasPoints[1].y);
             g2.draw(spot);
         }
-        for(int i=canvasPoints[1].y;i>=0;i-=ySpeSpan){
-            Line2D spot=new Line2D.Double(new Point(canvasPoints[0].x, i), new Point(canvasPoints[0].x+spotOffset, i));
+        loopindex=0;
+        for(int i=0;i<=yCoordHeight;i+=ySpeSpan){
+            Line2D spot=new Line2D.Double(new Point(canvasPoints[1].x, canvasPoints[1].y-i), new Point(canvasPoints[1].x+spotOffset, canvasPoints[1].y-i));
+            coordYPoints[loopindex++]=new Point(canvasPoints[1].x, canvasPoints[1].y-i);
             g2.draw(spot);
         }
     }
 
-    protected void initCanvas(Graphics2D g2) {
+    private void initCanvas(Graphics2D g2) {
         Rectangle2D rectangle2d=new Rectangle2D.Double();
         rectangle2d.setFrameFromDiagonal(canvasPoints[0], canvasPoints[3]);
+        this.canvasWidth=canvasPoints[2].x-canvasPoints[0].x;
+        this.canvasHeight=canvasPoints[1].y-canvasPoints[0].y;
         g2.setColor(canvasBGColor);
         g2.fill(rectangle2d);
     }
 
-    private void initPanelPoints() {
+    private void initPoints() {
         for (int i=0;i<4;i++) {
             panelPoints[i]=this.getLocation();
             canvasPoints[i]=this.getLocation();
@@ -138,49 +153,17 @@ public class BlankDataDrawPanel extends JPanel{
         panelLTX=this.getX();
         panelLTY=this.getY();
         panelWidth=this.getWidth();
-        panelHeiht=this.getHeight();
+        panelHeight=this.getHeight();
 
         panelPoints[0]=this.getLocation();
-        panelPoints[1].setLocation(panelLTX, panelLTY+panelHeiht);
+        panelPoints[1].setLocation(panelLTX, panelLTY+panelHeight);
         panelPoints[2].setLocation(panelLTX+panelWidth, panelLTY);
-        panelPoints[3].setLocation(panelLTX+panelWidth, panelLTY+panelHeiht);
+        panelPoints[3].setLocation(panelLTX+panelWidth, panelLTY+panelHeight);
         
         canvasPoints[0].setLocation(panelLTX+canvasSpecialOffset, panelLTY+canvasGeneralOffset);
-        canvasPoints[1].setLocation(panelLTX+canvasSpecialOffset, panelLTY+panelHeiht-canvasSpecialOffset);
+        canvasPoints[1].setLocation(panelLTX+canvasSpecialOffset, panelLTY+panelHeight-canvasSpecialOffset);
         canvasPoints[2].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+canvasGeneralOffset);
-        canvasPoints[3].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+panelHeiht-canvasSpecialOffset);
-    }
-
-    public int getRangeXMin() {
-        return rangeXMin;
-    }
-
-    public void setRangeXMin(int rangeXMin) {
-        this.rangeXMin = rangeXMin;
-    }
-
-    public int getRangeXMax() {
-        return rangeXMax;
-    }
-
-    public void setRangeXMax(int rangeXMax) {
-        this.rangeXMax = rangeXMax;
-    }
-
-    public double getRangeYMin() {
-        return rangeYMin;
-    }
-
-    public void setRangeYMin(double rangeYMin) {
-        this.rangeYMin = rangeYMin;
-    }
-
-    public double getRangeYMax() {
-        return rangeYMax;
-    }
-
-    public void setRangeYMax(double rangeYMax) {
-        this.rangeYMax = rangeYMax;
+        canvasPoints[3].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+panelHeight-canvasSpecialOffset);
     }
 
 }
