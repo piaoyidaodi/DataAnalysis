@@ -12,7 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import cc.comac.ui.popupmenu.DefaultWestPanePopupMenu;
+import cc.comac.ui.popupmenu.WestPanePopupMenu;
 import cc.comac.util.Context;
 
 public class MainFrameDirLabelTree extends JTree {
@@ -67,7 +67,7 @@ public class MainFrameDirLabelTree extends JTree {
             @Override
             public void mousePressed(MouseEvent e) {
                 if ((e.getModifiersEx()&InputEvent.BUTTON3_DOWN_MASK)!=0) {
-                    DefaultWestPanePopupMenu menu=new DefaultWestPanePopupMenu(MainFrameDirLabelTree.this);
+                    WestPanePopupMenu menu=new WestPanePopupMenu(MainFrameDirLabelTree.this);
                     menu.show(MainFrameDirLabelTree.this, e.getX(), e.getY());
                 }
 

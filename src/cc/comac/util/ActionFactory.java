@@ -17,6 +17,7 @@ import cc.comac.controller.WestPaneTreeController;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
+import cc.comac.ui.mainlayout.MainFrameCenterPane;
 
 public class ActionFactory {
     public static AbstractAction action=null;
@@ -247,6 +248,23 @@ public class ActionFactory {
         action.putValue(Action.SHORT_DESCRIPTION, "Open In Explorer");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_W);
+        return action;
+    }
+
+    public static AbstractAction getCloseTabAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainFrameCenterPane centerPane=Context.getInstance().getMainFrameCenterPane();
+                System.out.println(centerPane.getSelectedIndex());
+                centerPane.removeTabAt(centerPane.getSelectedIndex());
+            }
+        };
+        action.putValue(Action.NAME, "Close");
+        action.putValue(Action.SHORT_DESCRIPTION, "Close this Graphic");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
         return action;
     }
 }

@@ -69,4 +69,10 @@ public class MenuItemsFactory {
         return menuItem;
     }
 
+    public static JMenuItem getCloseTabItem(JComponent parent) {
+        menuItem=new JMenuItem(ActionFactory.getCloseTabAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt C"));
+        return menuItem;
+    }
+
 }

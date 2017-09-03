@@ -57,17 +57,11 @@ public class WestPaneTreeController{
         targetDataPairs=Context.getInstance().getTargetDataPairs();
         
         if (targetZipFileSet.contains(targetLabelZipFilePath)) {
-            if (drawNote.get(targetLabelZipFilePath)) {
-//                System.out.println(targetLabelZipFilePath+" Contains");
-                return;
-            }else {
-                Iterator<TargetDataPair> iterator=targetDataPairs.iterator();
-                while (iterator.hasNext()) {
-                    TargetDataPair pair=iterator.next();
-                    if (pair.getTargetLabelZipFilePath().equals(targetLabelZipFilePath)) {
-                        //TODO Data in the Note but have been closed
-                        drawOldData(targetLabelZipFilePath, pair);
-                    }
+            Iterator<TargetDataPair> iterator=targetDataPairs.iterator();
+            while (iterator.hasNext()) {
+                TargetDataPair pair=iterator.next();
+                if (pair.getTargetLabelZipFilePath().equals(targetLabelZipFilePath)) {
+                    drawOldData(targetLabelZipFilePath, pair);
                 }
             }
         }else {

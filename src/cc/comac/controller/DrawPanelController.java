@@ -1,79 +1,119 @@
 package cc.comac.controller;
 
 import java.io.File;
-
 import javax.swing.JSplitPane;
 
 import cc.comac.data.TargetDataPair;
-import cc.comac.util.Functions;
 
 public class DrawPanelController {
+    protected static int xSpanNum=8;
+    protected static int ySpanNum=5;
     
     private String targetLabelZipFilePath=null;
     private String targetLabelZipFileName=null;
     private String[] timeLabelValue=null;
     private Double[] dataLabelValue=null;
-    private int rangeXMin;
-    private int rangeXMax;
-    private double rangeYMin;
-    private double rangeYMax;
+    private int timeIndexMin;
+    private int timeIndexMax;
+    private double dataMin;
+    private double dataMax;
+    
+    private String[] xLabels=new String[xSpanNum+1];
+    private Double[] yLabels=new Double[ySpanNum+1];
 
     public DrawPanelController(JSplitPane mainPane,String targetLabelZipFilePath,TargetDataPair pair) {
         this.targetLabelZipFilePath=targetLabelZipFilePath;
         this.targetLabelZipFileName=targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1,targetLabelZipFilePath.lastIndexOf("."));
         this.timeLabelValue=pair.getTimeLabelValue();
         this.dataLabelValue=pair.getDataLabelValue();
-        this.rangeXMin=0;
-        this.rangeXMax=timeLabelValue.length-1;
-        // getMin and Max of the dataLabelValue
-        this.rangeYMin=Functions.getDoubleArrayMin(dataLabelValue);
-        this.rangeYMax=Functions.getDoubleArrayMax(dataLabelValue);
+        update();
         
-        
-    }
-
-    public void update(){
+//        this.timeIndexMin=0;
+//        this.timeIndexMax=timeLabelValue.length-1;
+//        analysisDataRange();
+//        updateXYLabel();
         
     }
     
+    public void update(){
+        // TODO changetimeIndex
+        this.timeIndexMin=0;
+        this.timeIndexMax=timeLabelValue.length-1;
+        analysisDataRange();
+        updateXYLabel();
+    }
+    
+    private void analysisDataRange(){
+        double min=dataLabelValue[timeIndexMin];
+        double max=dataLabelValue[timeIndexMin];
+        for(int i=timeIndexMin;i<=timeIndexMax;i++){
+            if (dataLabelValue[i]<min) {
+                min=dataLabelValue[i];
+            }else if (dataLabelValue[i]>=max) {
+                max=dataLabelValue[i];
+            }
+        }
+        this.dataMin=min;
+        this.dataMax=max;
+    }
+    
+    private void updateXYLabel(){
+        int xSpan=(timeIndexMax-timeIndexMin)/xSpanNum;
+        double ySpan=(dataMax-dataMin)/ySpanNum;
+        int xStep=xSpan;
+        double yStep=ySpan;
+        
+        xLabels[0]=timeLabelValue[0];
+        xLabels[xSpanNum]=timeLabelValue[timeIndexMax];
+
+        for(int i=1;i<xSpanNum;i++){
+            xLabels[i]=timeLabelValue[xStep];
+            xStep+=xSpan;
+        }
+        
+        if (dataMin==dataMax) {
+            yLabels[0]=dataMin;
+            yLabels[ySpanNum]=dataMax+1;
+        }else {
+            yLabels[0]=dataMin;
+            yLabels[ySpanNum]=dataMax;
+            for(int i=1;i<ySpanNum;i++){
+                yLabels[i]=dataMin+yStep;
+                yStep+=ySpan;
+            }
+        }
+    }
+    
+    public int getTimeIndexMin() {
+        return timeIndexMin;
+    }
+
+    public void setTimeIndexMin(int timeIndexMin) {
+        this.timeIndexMin = timeIndexMin;
+    }
+
+    public int getTimeIndexMax() {
+        return timeIndexMax;
+    }
+
+    public void setTimeIndexMax(int timeIndexMax) {
+        this.timeIndexMax = timeIndexMax;
+    }
+
+    public double getDataMin() {
+        return dataMin;
+    }
+
+    public double getDataMax() {
+        return dataMax;
+    }
+
     public String getTargetLabelZipFilePath() {
         return targetLabelZipFilePath;
     }
     
     public String getTargetLabelZipFileName() {
         return targetLabelZipFileName;
-    }
-
-    public int getRangeXMin() {
-        return rangeXMin;
-    }
-
-    public void setRangeXMin(int rangeXMin) {
-        this.rangeXMin = rangeXMin;
-    }
-
-    public int getRangeXMax() {
-        return rangeXMax;
-    }
-
-    public void setRangeXMax(int rangeXMax) {
-        this.rangeXMax = rangeXMax;
-    }
-
-    public double getRangeYMin() {
-        return rangeYMin;
-    }
-
-    public void setRangeYMin(double rangeYMin) {
-        this.rangeYMin = rangeYMin;
-    }
-
-    public double getRangeYMax() {
-        return rangeYMax;
-    }
-
-    public void setRangeYMax(double rangeYMax) {
-        this.rangeYMax = rangeYMax;
     }
     
     public String[] getTimeLabelValue() {
@@ -84,5 +124,12 @@ public class DrawPanelController {
         return dataLabelValue;
     }
 
+    public String[] getxLabels() {
+        return xLabels;
+    }
 
+    public Double[] getyLabels() {
+        return yLabels;
+    }
+    
 }

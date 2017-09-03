@@ -15,7 +15,7 @@ public class BlankDataDrawPanel extends JPanel{
     private final int PREFER_WIDTH=650;
     private final int PREFER_HEIGHT=400;
     protected static int xSpanNum=8;
-    protected static int ySpanNum=6;
+    protected static int ySpanNum=5;
     
     protected Point[] panelPoints=new Point[4];
     protected int panelLTX;
@@ -25,12 +25,13 @@ public class BlankDataDrawPanel extends JPanel{
     
     protected Point[] canvasPoints=new Point[4];
     protected int canvasGeneralOffset=10;
-    protected int canvasSpecialOffset=35;
+    protected int canvasSpecialXOffset=35;
+    protected int canvasSpecialYOffset=50;
     protected int canvasWidth;
     protected int canvasHeight;
     
-    protected Point[] coordXPoints=new Point[xSpanNum];
-    protected Point[] coordYPoints=new Point[ySpanNum];
+    protected Point[] coordXPoints=new Point[xSpanNum+1];
+    protected Point[] coordYPoints=new Point[ySpanNum+1];
     protected int xSpeSpan;
     protected int ySpeSpan;
     protected int xSpan;
@@ -93,10 +94,6 @@ public class BlankDataDrawPanel extends JPanel{
     }
 
     private void initCoordinate(Graphics2D g2) {
-        /*
-        int xSpeSpan=(int)(xCoordWidth/(5.0*xSpan)+0.5)*xSpan;
-        int ySpeSpan=(int)(yCoordHeight/(5.0*ySpan)+0.5)*ySpan;
-        */
         int arrawOffset=3;
         g2.setColor(Color.gray);
         Line2D topCoordLine=new Line2D.Double(canvasPoints[0], canvasPoints[2]);
@@ -119,20 +116,22 @@ public class BlankDataDrawPanel extends JPanel{
         int loopindex=0;
         int xCoordWidth=canvasPoints[2].x-canvasPoints[0].x;
         int yCoordHeight=canvasPoints[1].y-canvasPoints[0].y;
-        this.xSpeSpan=xCoordWidth/8+1;
-        this.ySpeSpan=yCoordHeight/6+1;
+        this.xSpeSpan=xCoordWidth/xSpanNum+1;
+        this.ySpeSpan=yCoordHeight/ySpanNum+1;
         
         for(int i=0;i<=xCoordWidth;i+=xSpeSpan){
             Line2D spot=new Line2D.Double(new Point(canvasPoints[0].x+i, canvasPoints[1].y), new Point(canvasPoints[0].x+i, canvasPoints[1].y-spotOffset));
             coordXPoints[loopindex++]=new Point(canvasPoints[0].x+i, canvasPoints[1].y);
             g2.draw(spot);
         }
+        coordXPoints[xSpanNum]=canvasPoints[3];
         loopindex=0;
         for(int i=0;i<=yCoordHeight;i+=ySpeSpan){
             Line2D spot=new Line2D.Double(new Point(canvasPoints[1].x, canvasPoints[1].y-i), new Point(canvasPoints[1].x+spotOffset, canvasPoints[1].y-i));
             coordYPoints[loopindex++]=new Point(canvasPoints[1].x, canvasPoints[1].y-i);
             g2.draw(spot);
         }
+        coordYPoints[ySpanNum]=canvasPoints[0];
     }
 
     private void initCanvas(Graphics2D g2) {
@@ -160,10 +159,10 @@ public class BlankDataDrawPanel extends JPanel{
         panelPoints[2].setLocation(panelLTX+panelWidth, panelLTY);
         panelPoints[3].setLocation(panelLTX+panelWidth, panelLTY+panelHeight);
         
-        canvasPoints[0].setLocation(panelLTX+canvasSpecialOffset, panelLTY+canvasGeneralOffset);
-        canvasPoints[1].setLocation(panelLTX+canvasSpecialOffset, panelLTY+panelHeight-canvasSpecialOffset);
+        canvasPoints[0].setLocation(panelLTX+canvasSpecialYOffset, panelLTY+canvasGeneralOffset);
+        canvasPoints[1].setLocation(panelLTX+canvasSpecialYOffset, panelLTY+panelHeight-canvasSpecialXOffset);
         canvasPoints[2].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+canvasGeneralOffset);
-        canvasPoints[3].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+panelHeight-canvasSpecialOffset);
+        canvasPoints[3].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+panelHeight-canvasSpecialXOffset);
     }
 
 }
