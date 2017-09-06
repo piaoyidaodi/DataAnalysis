@@ -15,6 +15,7 @@ public class DrawPanelController {
     private Double[] dataLabelValue=null;
     private int timeIndexMin;
     private int timeIndexMax;
+    private int timeNum;
     private double dataMin;
     private double dataMax;
     
@@ -26,19 +27,13 @@ public class DrawPanelController {
         this.targetLabelZipFileName=targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1,targetLabelZipFilePath.lastIndexOf("."));
         this.timeLabelValue=pair.getTimeLabelValue();
         this.dataLabelValue=pair.getDataLabelValue();
+        this.timeIndexMin=0;
+        this.timeIndexMax=timeLabelValue.length-1;
         update();
-        
-//        this.timeIndexMin=0;
-//        this.timeIndexMax=timeLabelValue.length-1;
-//        analysisDataRange();
-//        updateXYLabel();
-        
     }
     
     public void update(){
-        // TODO changetimeIndex
-        this.timeIndexMin=0;
-        this.timeIndexMax=timeLabelValue.length-1;
+        this.setTimeNum(timeIndexMax-timeIndexMin+1);
         analysisDataRange();
         updateXYLabel();
     }
@@ -55,6 +50,11 @@ public class DrawPanelController {
         }
         this.dataMin=min;
         this.dataMax=max;
+        System.out.println("timeIndexMin:"+timeIndexMin);
+        System.out.println("timeIndexMax:"+timeIndexMax);
+        System.out.println("dataMin:"+dataMin);
+        System.out.println("dataMax:"+dataMax);
+        System.out.println("--------------");
     }
     
     private void updateXYLabel(){
@@ -63,11 +63,11 @@ public class DrawPanelController {
         int xStep=xSpan;
         double yStep=ySpan;
         
-        xLabels[0]=timeLabelValue[0];
+        xLabels[0]=timeLabelValue[timeIndexMin];
         xLabels[xSpanNum]=timeLabelValue[timeIndexMax];
 
         for(int i=1;i<xSpanNum;i++){
-            xLabels[i]=timeLabelValue[xStep];
+            xLabels[i]=timeLabelValue[timeIndexMin+xStep];
             xStep+=xSpan;
         }
         
@@ -130,6 +130,14 @@ public class DrawPanelController {
 
     public Double[] getyLabels() {
         return yLabels;
+    }
+
+    public int getTimeNum() {
+        return timeNum;
+    }
+
+    public void setTimeNum(int timeNum) {
+        this.timeNum = timeNum;
     }
     
 }

@@ -2,6 +2,7 @@ package cc.comac.ui.menu;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import cc.comac.util.ActionFactory;
@@ -73,6 +74,18 @@ public class MenuItemsFactory {
         menuItem=new JMenuItem(ActionFactory.getCloseTabAction(parent));
         menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt C"));
         return menuItem;
+    }
+
+    public static JRadioButtonMenuItem getSelectCursorItem(JComponent parent) {
+        menuItem=new JRadioButtonMenuItem(ActionFactory.getMouseSelectAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl L"));
+        return (JRadioButtonMenuItem)menuItem;
+    }
+
+    public static JRadioButtonMenuItem getHandCursorItem(JComponent parent) {
+        menuItem=new JRadioButtonMenuItem(ActionFactory.getMouseHandAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl H"));
+        return (JRadioButtonMenuItem)menuItem;
     }
 
 }

@@ -141,6 +141,7 @@ public class BlankDataDrawPanel extends JPanel{
         this.canvasHeight=canvasPoints[1].y-canvasPoints[0].y;
         g2.setColor(canvasBGColor);
         g2.fill(rectangle2d);
+        
     }
 
     private void initPoints() {

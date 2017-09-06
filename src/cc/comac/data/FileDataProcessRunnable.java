@@ -130,6 +130,10 @@ public class FileDataProcessRunnable implements Runnable{
             labelSize=lineParas.length;
             // labelArray line write to labelArray
             for (String alabel : lineParas) {
+                if (alabel.contains("\\")) {
+                    System.out.println(alabel);
+                    alabel=alabel.replace("\\", "_");
+                }
                 labelArray.add(alabel);
             }
             eachLabelArray=new ArrayList[labelSize];

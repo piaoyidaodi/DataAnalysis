@@ -267,4 +267,39 @@ public class ActionFactory {
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
         return action;
     }
+
+    public static AbstractAction getMouseSelectAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Context.getInstance().setSelectCursor(true);
+                Context.getInstance().getMainFrameToolbar().getComponentAtIndex(6).setEnabled(false);
+                Context.getInstance().getMainFrameToolbar().getComponentAtIndex(7).setEnabled(true);
+            }
+        };
+        action.putValue(Action.NAME, "Select");
+        action.putValue(Action.SHORT_DESCRIPTION, "Select the Figure");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
+        return action;
+    }
+    
+    public static AbstractAction getMouseHandAction(JComponent parent) {
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Context.getInstance().setSelectCursor(false);
+                Context.getInstance().getMainFrameToolbar().getComponentAtIndex(6).setEnabled(true);
+                Context.getInstance().getMainFrameToolbar().getComponentAtIndex(7).setEnabled(false);
+            }
+        };
+        action.putValue(Action.NAME, "Hand");
+        action.putValue(Action.SHORT_DESCRIPTION, "Hand the Figure");
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_H);
+        return action;
+    }
+
 }

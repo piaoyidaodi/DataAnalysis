@@ -29,6 +29,7 @@ public class Context {
     private MainFrameWestPane mainFrameWestPane=null;
     private JSplitPane mainPane=null;
     private final int SETSIZE=5;
+    private boolean isSelectCursor=true;
     
     private HashSet<String> workSpaceTreeHashSet=new HashSet<>();
     private HashSet<String> targetZipFileSet=new HashSet<>();
@@ -174,6 +175,14 @@ public class Context {
     
     public void setMainFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+    }
+
+    public boolean isSelectCursor() {
+        return isSelectCursor;
+    }
+
+    public void setSelectCursor(boolean isSelectCursor) {
+        this.isSelectCursor = isSelectCursor;
     }
 
 }

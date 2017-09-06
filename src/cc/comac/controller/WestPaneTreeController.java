@@ -2,7 +2,6 @@ package cc.comac.controller;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -15,7 +14,6 @@ public class WestPaneTreeController{
     
     private HashSet<String> workSpaceTreeHashSet=null;
     private HashSet<String> targetZipFileSet=null;
-    private HashMap<String, Boolean> drawNote=null;
     private ArrayList<TargetDataPair> targetDataPairs=null;
     private String targetLabelZipFilePath=null;
     
@@ -36,7 +34,6 @@ public class WestPaneTreeController{
         Iterator<String>iterator= workSpaceTreeHashSet.iterator();
         while (iterator.hasNext()){
             String fileName=iterator.next();
-//            System.out.println("do File "+fileName);
 
             File file=new File(fileName);
             if (!file.exists()) return;
@@ -53,7 +50,6 @@ public class WestPaneTreeController{
     public void updateLabelFileModel(){
         targetLabelZipFilePath=Context.getInstance().getTargetLabelZipFilePath();
         targetZipFileSet=Context.getInstance().getTargetZipFileSet();
-        drawNote=Context.getInstance().getDrawNote();
         targetDataPairs=Context.getInstance().getTargetDataPairs();
         
         if (targetZipFileSet.contains(targetLabelZipFilePath)) {
