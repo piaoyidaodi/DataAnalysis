@@ -8,9 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -24,7 +21,6 @@ import cc.comac.util.Context;
 public class DataDrawPanel extends BlankDataDrawPanel {
     
     private DrawPanelController controller;
-    
     private Double[] dataLabelValue=null;
     private int timeIndexMin;
     private int timeIndexMax;
@@ -34,9 +30,6 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     private String[] xLabels=new String[xSpanNum+1];
     private Double[] yLabels=new Double[ySpanNum+1];
     
-    private Point p1=new Point();
-    private Point p2=new Point();
-
     
     private int fontSize;
     
@@ -170,18 +163,15 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     
     private void addListener(){
         
-        
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton()==MouseEvent.BUTTON1) {
+                    pPre=e.getPoint();
                     if (Context.getInstance().isSelectCursor()) {
-                        p1=e.getPoint();
-                        int mouseX1=controller.getTimeNum()/DataDrawPanel.this.canvasWidth*e.getX();
-                        controller.setTimeIndexMin(mouseX1);
-                        System.out.println("press "+mouseX1);
-                    }else if(!Context.getInstance().isSelectCursor()) {
-                        
+                        if(pPre.x<canvasPoints[0].x||pPre.x>canvasPoints[3].x){
+                            pPre=canvasPoints[0];
+                        }
                     }
                 }else if ((e.getModifiersEx()&InputEvent.BUTTON3_DOWN_MASK)!=0) {
                     CenterPanePopupMenu menu=new CenterPanePopupMenu(DataDrawPanel.this);
@@ -192,15 +182,51 @@ public class DataDrawPanel extends BlankDataDrawPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton()==MouseEvent.BUTTON1) {
+                    pBhd=e.getPoint();
+                    int tmpTimeIndexMin=controller.getTimeIndexMin();
+                    int tmpTimeIndexMax=controller.getTimeIndexMax();
+
                     if (Context.getInstance().isSelectCursor()) {
-                        int mouseX2=controller.getTimeNum()/DataDrawPanel.this.canvasWidth*e.getX();
-                        controller.setTimeIndexMax(mouseX2);
-                        System.out.println("Release "+mouseX2);
+                        if(pBhd.x<canvasPoints[0].x||pPre.x>canvasPoints[3].x){
+                            pPre=canvasPoints[3];
+                        }
                         
-                        DataDrawPanel.this.update();
+                        if (pPre.x>=pBhd.x) {
+                            tmpTimeIndexMin=0;
+                            tmpTimeIndexMax=controller.getTimeLabelValue().length-1;
+                        }else {
+                            if (controller.getTimeNum()>=DataDrawPanel.this.canvasWidth){
+                                int tmpM1=controller.getTimeNum()/DataDrawPanel.this.canvasWidth*(pPre.x-canvasPoints[0].x)+tmpTimeIndexMin;
+                                int tmpM2=controller.getTimeNum()/DataDrawPanel.this.canvasWidth*(pBhd.x-canvasPoints[0].x)+tmpTimeIndexMin;
+                                tmpTimeIndexMin=tmpM1;
+                                tmpTimeIndexMax=tmpM2;
+                            }
+                        }
                     }else if(!Context.getInstance().isSelectCursor()) {
-                        
+                        int xRange=pPre.x-pBhd.x;
+                        int maxRange=controller.getTimeLabelValue().length-1;
+                        if (xRange<=0) {
+                            xRange=-xRange;
+                            if (tmpTimeIndexMin<=xRange) {
+                                tmpTimeIndexMin=0;
+                            }else {
+                                tmpTimeIndexMin-=xRange;
+                                tmpTimeIndexMax-=xRange;
+                            }
+                        }else {
+                            if (tmpTimeIndexMax+xRange>=maxRange) {
+                                tmpTimeIndexMax=maxRange;
+                            }else{
+                                tmpTimeIndexMax+=xRange;
+                                tmpTimeIndexMin+=xRange;
+                            }
+                        }
                     }
+                    controller.setTimeIndexMin(tmpTimeIndexMin);
+                    controller.setTimeIndexMax(tmpTimeIndexMax);
+                    System.out.println("press "+pPre.toString());
+                    System.out.println("Release "+pBhd.toString());
+                    DataDrawPanel.this.update();
                 }
             }
             
@@ -234,15 +260,15 @@ public class DataDrawPanel extends BlankDataDrawPanel {
                 Graphics2D g2=(Graphics2D)DataDrawPanel.this.getGraphics();
                 System.out.println("Mouse Drag "+e.getX());
                 if (Context.getInstance().isSelectCursor()) {
-                    p2=e.getPoint();
-                    float[] dashPattern={2.0F,2.0F,2.0F,2.0F};
+                    pBhd=e.getPoint();
+                    float[] dashPattern={1.0F,1.0F,1.0F,1.0F};
                     float miterLimit=10.0F;
                     float dashPhase=0;
                     BasicStroke stroke=new BasicStroke(1.0F, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, miterLimit, dashPattern, dashPhase);
                     g2.setStroke(stroke);
-                    g2.setColor(new Color(144,238,144, 150));
-                    g2.drawRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
-                    DataDrawPanel.this.repaint();
+                    g2.setColor(new Color(0,128,0, 150));
+                    g2.drawRect(pPre.x, pPre.y, pBhd.x-pPre.x, pBhd.y-pPre.y);
+                    DataDrawPanel.this.update();
                     
                 }
                 
@@ -264,4 +290,9 @@ public class DataDrawPanel extends BlankDataDrawPanel {
         this.repaint();
         
     }
+    
+    public DrawPanelController getController() {
+        return controller;
+    }
+
 }

@@ -15,6 +15,7 @@ public class DrawPanelController {
     private Double[] dataLabelValue=null;
     private int timeIndexMin;
     private int timeIndexMax;
+
     private int timeNum;
     private double dataMin;
     private double dataMax;
@@ -33,6 +34,8 @@ public class DrawPanelController {
     }
     
     public void update(){
+//        this.baseTimeMin=timeIndexMin;
+//        this.baseTimeMax=timeIndexMax;
         this.setTimeNum(timeIndexMax-timeIndexMin+1);
         analysisDataRange();
         updateXYLabel();
@@ -139,5 +142,5 @@ public class DrawPanelController {
     public void setTimeNum(int timeNum) {
         this.timeNum = timeNum;
     }
-    
+
 }

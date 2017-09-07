@@ -66,7 +66,7 @@ public class MenuItemsFactory {
 
     public static JMenuItem getOpenInExplorerItem(JComponent parent) {
         menuItem=new JMenuItem(ActionFactory.getOpenInExplorerAction(parent));
-        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt P"));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl P"));
         return menuItem;
     }
 
@@ -86,6 +86,12 @@ public class MenuItemsFactory {
         menuItem=new JRadioButtonMenuItem(ActionFactory.getMouseHandAction(parent));
         menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl H"));
         return (JRadioButtonMenuItem)menuItem;
+    }
+
+    public static JMenuItem getPanelSettingItem(JComponent parent) {
+        menuItem=new JMenuItem(ActionFactory.getPanelSettingAction(parent));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt P"));
+        return menuItem;
     }
 
 }

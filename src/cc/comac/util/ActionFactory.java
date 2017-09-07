@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import cc.comac.controller.WestPaneTreeController;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
+import cc.comac.ui.dialog.SettingPanelDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
 import cc.comac.ui.mainlayout.MainFrameCenterPane;
 
@@ -299,6 +300,23 @@ public class ActionFactory {
         action.putValue(Action.SHORT_DESCRIPTION, "Hand the Figure");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_H);
+        return action;
+    }
+
+    public static AbstractAction getPanelSettingAction(JComponent parent) {
+        String title="Setting Panel Property";
+        action=new AbstractAction() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingPanelDialog dialog=new SettingPanelDialog(Context.getInstance().getMainFrame(),parent,title,true);
+                dialog.setVisible(true);
+            }
+        };
+        action.putValue(Action.NAME, "Settings");
+        action.putValue(Action.SHORT_DESCRIPTION, title);
+        action.putValue(Action.SMALL_ICON, null);
+        action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         return action;
     }
 

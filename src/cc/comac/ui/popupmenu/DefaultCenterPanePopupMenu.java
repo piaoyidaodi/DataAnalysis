@@ -19,6 +19,9 @@ public class DefaultCenterPanePopupMenu extends JPopupMenu {
 
     private void addMenuItem(JComponent parent, JPopupMenu menu,Action...actions) {
         JMenuItem closeTabItem=MenuItemsFactory.getCloseTabItem(parent);
+        JMenuItem panelSettingItem=MenuItemsFactory.getPanelSettingItem(parent);
+        
+        // Radio Button
         JRadioButtonMenuItem selectCursorItem=MenuItemsFactory.getSelectCursorItem(parent);
         JRadioButtonMenuItem handCursorItem=MenuItemsFactory.getHandCursorItem(parent);
         ButtonGroup group=new ButtonGroup();
@@ -29,9 +32,11 @@ public class DefaultCenterPanePopupMenu extends JPopupMenu {
         }else {
             handCursorItem.setSelected(true);
         }
-        this.add(closeTabItem);
-        this.addSeparator();
+        // Add MenuItem to PopMenu
         this.add(selectCursorItem);
         this.add(handCursorItem);
+        this.addSeparator();
+        this.add(panelSettingItem);
+        this.add(closeTabItem);
     }
 }

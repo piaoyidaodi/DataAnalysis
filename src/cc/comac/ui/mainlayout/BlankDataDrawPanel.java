@@ -42,6 +42,9 @@ public class BlankDataDrawPanel extends JPanel{
     protected Color coordinateColor=null;
     protected Color scaleLineColor=null;
     
+    protected Point pPre=new Point();
+    protected Point pBhd=new Point();
+    
     public BlankDataDrawPanel(){
         super();
     }
@@ -164,6 +167,22 @@ public class BlankDataDrawPanel extends JPanel{
         canvasPoints[1].setLocation(panelLTX+canvasSpecialYOffset, panelLTY+panelHeight-canvasSpecialXOffset);
         canvasPoints[2].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+canvasGeneralOffset);
         canvasPoints[3].setLocation(panelLTX+panelWidth-canvasGeneralOffset, panelLTY+panelHeight-canvasSpecialXOffset);
+    }
+
+    public Point getpPre() {
+        return pPre;
+    }
+
+    public void setpPre(Point pPre) {
+        this.pPre = pPre;
+    }
+
+    public Point getpBhd() {
+        return pBhd;
+    }
+
+    public void setpBhd(Point pBhd) {
+        this.pBhd = pBhd;
     }
 
 }
