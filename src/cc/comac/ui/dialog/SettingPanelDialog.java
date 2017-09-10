@@ -26,12 +26,13 @@ public class SettingPanelDialog extends JDialog {
         this.controller=panel.getController();
         this.timeLabelValue=controller.getTimeLabelValue();
         this.dataLabelValue=controller.getDataLabelValue();
-        this.timeIndexMin=controller.getTimeIndexMin();
-        this.timeIndexMax=controller.getTimeIndexMax();
         updateUI();
     }
 
     private void updateUI() {
         // TODO updateUI
+        this.timeIndexMin=controller.getTimeIndexMin();
+        this.timeIndexMax=controller.getTimeIndexMax();
+
     }
 }

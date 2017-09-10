@@ -24,9 +24,9 @@ public class BlankDataDrawPanel extends JPanel{
     protected int panelHeight;
     
     protected Point[] canvasPoints=new Point[4];
-    protected int canvasGeneralOffset=10;
-    protected int canvasSpecialXOffset=35;
-    protected int canvasSpecialYOffset=50;
+    protected int canvasGeneralOffset;
+    protected int canvasSpecialXOffset;
+    protected int canvasSpecialYOffset;
     protected int canvasWidth;
     protected int canvasHeight;
     
@@ -42,6 +42,7 @@ public class BlankDataDrawPanel extends JPanel{
     protected Color coordinateColor=null;
     protected Color scaleLineColor=null;
     
+    
     protected Point pPre=new Point();
     protected Point pBhd=new Point();
     
@@ -55,8 +56,12 @@ public class BlankDataDrawPanel extends JPanel{
         this.canvasBGColor=Color.white;
         this.coordinateColor=Color.darkGray;
         this.scaleLineColor=new Color(100,149,237,150);
-        
         this.setBackground(panelBGColor);
+        
+        this.canvasGeneralOffset=10;
+        this.canvasSpecialXOffset=35;
+        this.canvasSpecialYOffset=50;
+        
         this.setMinimumSize(new Dimension(650, 200));
         this.setPreferredSize(new Dimension(PREFER_WIDTH, PREFER_HEIGHT));
 

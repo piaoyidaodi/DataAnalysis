@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import cc.comac.controller.DrawPanelController;
 import cc.comac.ui.popupmenu.CenterPanePopupMenu;
 import cc.comac.util.Context;
@@ -26,60 +25,95 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     private int timeIndexMax;
     private double dataMin;
     private double dataMax;
+    private String targetLabelZipFileName;
         
     private String[] xLabels=new String[xSpanNum+1];
     private Double[] yLabels=new Double[ySpanNum+1];
     
-    
+    private Font labelFont;
+    private Color labelFontColor;
     private int fontSize;
+
+    private Color lineColor;
+    private float lineWidth;
+    
+    private Font labelNameFont;
+    private Color labelNameFontColor;
+    private int labelNameFontSize;
     
     public DataDrawPanel() {}
 
     public DataDrawPanel(DataSplitPane parent,String targetLabelZipFilePath, DrawPanelController controller) {
         super(parent);
-        dataLabelValue=controller.getDataLabelValue();
-        this.timeIndexMin=controller.getTimeIndexMin();
-        this.timeIndexMax=controller.getTimeIndexMax();
-        this.dataMin=controller.getDataMin();
-        this.dataMax=controller.getDataMax();
-        this.xLabels=controller.getxLabels();
-        this.yLabels=controller.getyLabels();
-        
+        this.dataLabelValue=controller.getDataLabelValue();
         this.controller=controller;
-        this.fontSize=12;
-        this.addListener();
-        
+        init();
+        this.addListener();        
     }
     
     private void init(){
+        this.targetLabelZipFileName=controller.getTargetLabelZipFileName();
         this.timeIndexMin=controller.getTimeIndexMin();
         this.timeIndexMax=controller.getTimeIndexMax();
         this.dataMin=controller.getDataMin();
         this.dataMax=controller.getDataMax();
         this.xLabels=controller.getxLabels();
         this.yLabels=controller.getyLabels();
+        this.fontSize=controller.getFontSize();
+        // BlankDataDraw Colors
+        this.panelBGColor=controller.getPanelBGColor();
+        this.canvasBGColor=controller.getCanvasBGColor();
+        this.coordinateColor=controller.getCoordinateColor();
+        this.scaleLineColor=controller.getScaleLineColor();
+        this.setBackground(panelBGColor);
+        // Data Properties
+        this.labelFont=new Font(controller.getFontName(), controller.getFontStyle(), controller.getFontSize());
+        this.labelFontColor=controller.getLabelFontColor();
+        
+        this.canvasGeneralOffset=controller.getCanvasGeneralOffset();
+        this.canvasSpecialXOffset=controller.getCanvasSpecialXOffset();
+        this.canvasSpecialYOffset=controller.getCanvasSpecialYOffset();
+        
+        this.lineColor=controller.getLineColor();
+        this.lineWidth=controller.getLineWidth();
+        // LabelName
+        this.labelNameFont=new Font(controller.getLabelNameFontName(), controller.getLabelNameFontStyle(), controller.getLabelNameFontSize());
+        this.labelNameFontSize=controller.getLabelNameFontSize();
+        this.labelNameFontColor=controller.getLabelNameFontColor();
+    }
+    
+    public void update(){
+        controller.update();
+        init();
+        this.repaint();
     }
     
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        init();
         
-        System.out.println("RePaint");
         Graphics2D g2=(Graphics2D) g;
+        drawNameLabel(g2);
         drawLines(g2);
-        System.out.println("drawLines");
         drawTimeLabels(g2);
-        System.out.println("drawTimeLabels");
         drawDataLabels(g2);
-        System.out.println("drawDataLabels");
     }
     
+    protected void drawNameLabel(Graphics2D g2) {
+        int nameXOffset=(int)(labelNameFontSize*0.5);
+        int nameYOffset=(int)(labelNameFontSize*0.8);
+        targetLabelZipFileName=controller.getTargetLabelZipFileName();
+        g2.setFont(labelNameFont);
+        g2.setColor(labelNameFontColor);
+        
+        g2.drawString(targetLabelZipFileName, canvasPoints[2].x-nameXOffset*targetLabelZipFileName.length(), canvasPoints[2].y+nameYOffset);
+    }
+
     protected void drawLines(Graphics2D g2) {
         int timeIndexNumber=timeIndexMax-timeIndexMin+1;
         System.out.println("time Index Number:"+timeIndexNumber);
-        g2.setColor(Color.red);
-        g2.setStroke(new BasicStroke(1.0F));
+        g2.setColor(lineColor);
+        g2.setStroke(new BasicStroke(lineWidth));
 
         if (dataMin==dataMax) {
             g2.drawLine(canvasPoints[1].x, canvasPoints[1].y-1, canvasPoints[3].x, canvasPoints[3].y-1);
@@ -112,8 +146,8 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     protected void drawTimeLabels(Graphics2D g2){
         int xXOffset=fontSize/2*4;
         int xYOffset=fontSize+1;
-        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
-        g2.setColor(Color.black);
+        g2.setFont(labelFont);
+        g2.setColor(labelFontColor);
         for (int i=0;i<=xSpanNum;i++) {
             String labelName=xLabels[i].substring(0,8);
             if (i==0) {
@@ -132,8 +166,8 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     protected void drawDataLabels(Graphics2D g2){
         int yXOffset=fontSize/2+1;
         int yYOffset=fontSize/2;
-        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
-        g2.setColor(Color.black);
+        g2.setFont(labelFont);
+        g2.setColor(labelFontColor);
         
         if (dataMin==dataMax) {
             String labelName=yLabels[0].toString();
@@ -279,18 +313,16 @@ public class DataDrawPanel extends BlankDataDrawPanel {
             
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                
+                // TODO ADD Wheel Move Actions
+//                Graphics2D g2=(Graphics2D)DataDrawPanel.this.getGraphics();
+                if (!Context.getInstance().isSelectCursor()) {
+                    
+                }
             }
         });
         
     }
-    
-    public void update(){
-        controller.update();
-        this.repaint();
-        
-    }
-    
+
     public DrawPanelController getController() {
         return controller;
     }
