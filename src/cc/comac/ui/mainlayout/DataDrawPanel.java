@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import cc.comac.controller.DrawPanelController;
+import cc.comac.ui.dialog.SettingPanelDialog;
 import cc.comac.ui.popupmenu.CenterPanePopupMenu;
 import cc.comac.util.Context;
 
@@ -39,7 +40,8 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     
     private Font labelNameFont;
     private Color labelNameFontColor;
-    private int labelNameFontSize;
+
+    private SettingPanelDialog dialog;
     
     public DataDrawPanel() {}
 
@@ -47,6 +49,7 @@ public class DataDrawPanel extends BlankDataDrawPanel {
         super(parent);
         this.dataLabelValue=controller.getDataLabelValue();
         this.controller=controller;
+        dialog=new SettingPanelDialog(Context.getInstance().getMainFrame(), this, "Setting Panel Property", true);
         init();
         this.addListener();        
     }
@@ -78,7 +81,6 @@ public class DataDrawPanel extends BlankDataDrawPanel {
         this.lineWidth=controller.getLineWidth();
         // LabelName
         this.labelNameFont=new Font(controller.getLabelNameFontName(), controller.getLabelNameFontStyle(), controller.getLabelNameFontSize());
-        this.labelNameFontSize=controller.getLabelNameFontSize();
         this.labelNameFontColor=controller.getLabelNameFontColor();
     }
     
@@ -100,13 +102,11 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     }
     
     protected void drawNameLabel(Graphics2D g2) {
-        int nameXOffset=(int)(labelNameFontSize*0.5);
-        int nameYOffset=(int)(labelNameFontSize*0.8);
         targetLabelZipFileName=controller.getTargetLabelZipFileName();
         g2.setFont(labelNameFont);
         g2.setColor(labelNameFontColor);
-        
-        g2.drawString(targetLabelZipFileName, canvasPoints[2].x-nameXOffset*targetLabelZipFileName.length(), canvasPoints[2].y+nameYOffset);
+//        canvasPoints[2].x-nameXOffset*targetLabelZipFileName.length(), canvasPoints[2].y+nameYOffset
+        g2.drawString(targetLabelZipFileName, panelWidth*2/5,panelHeight-5);
     }
 
     protected void drawLines(Graphics2D g2) {
@@ -325,6 +325,10 @@ public class DataDrawPanel extends BlankDataDrawPanel {
 
     public DrawPanelController getController() {
         return controller;
+    }
+
+    public SettingPanelDialog getDialog() {
+        return dialog;
     }
 
 }

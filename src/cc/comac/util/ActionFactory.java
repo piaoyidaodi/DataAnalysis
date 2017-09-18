@@ -16,8 +16,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import cc.comac.controller.WestPaneTreeController;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
-import cc.comac.ui.dialog.SettingPanelDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
+import cc.comac.ui.mainlayout.DataDrawPanel;
 import cc.comac.ui.mainlayout.MainFrameCenterPane;
 
 public class ActionFactory {
@@ -309,8 +309,8 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                SettingPanelDialog dialog=new SettingPanelDialog(Context.getInstance().getMainFrame(),parent,title,true);
-                dialog.setVisible(true);
+                DataDrawPanel panel=(DataDrawPanel)parent;
+                panel.getDialog().setVisible(true);
             }
         };
         action.putValue(Action.NAME, "Settings");

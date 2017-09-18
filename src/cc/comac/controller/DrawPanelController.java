@@ -34,26 +34,26 @@ public class DrawPanelController {
     private int canvasSpecialXOffset;
     private int canvasSpecialYOffset;
     
-    private Color labelColor;
     
     private String fontName;
     private int fontStyle;
     private int fontSize;
     private Color labelFontColor;
     
+    private Color lineColor;
+    private float lineWidth;
+
     private String labelNameFontName;
     private int labelNameFontStyle;
     private int labelNameFontSize;
     private Color labelNameFontColor;
     
-    private Color lineColor;
-    private float lineWidth;
-
     public DrawPanelController(JSplitPane mainPane,String targetLabelZipFilePath,TargetDataPair pair) {
         this.targetLabelZipFilePath=targetLabelZipFilePath;
         this.targetLabelZipFileName=targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1,targetLabelZipFilePath.lastIndexOf("."));
         this.timeLabelValue=pair.getTimeLabelValue();
         this.dataLabelValue=pair.getDataLabelValue();
+        //TODO Reset para
         this.timeIndexMin=0;
         this.timeIndexMax=timeLabelValue.length-1;
         
@@ -61,6 +61,7 @@ public class DrawPanelController {
         this.canvasBGColor=Color.white;
         this.coordinateColor=Color.darkGray;
         this.scaleLineColor=new Color(100,149,237,150);
+        
         this.canvasGeneralOffset=10;
         this.canvasSpecialXOffset=35;
         this.canvasSpecialYOffset=50;
@@ -74,7 +75,7 @@ public class DrawPanelController {
         this.setLineWidth(1.0F);
         
         this.setLabelNameFontName("SansSerif");
-        this.setLabelNameFontStyle(Font.PLAIN);
+        this.setLabelNameFontStyle(Font.BOLD);
         this.setLabelNameFontSize(12);
         this.setLabelNameFontColor(Color.red);
         
@@ -251,14 +252,6 @@ public class DrawPanelController {
 
     public void setCanvasSpecialYOffset(int canvasSpecialYOffset) {
         this.canvasSpecialYOffset = canvasSpecialYOffset;
-    }
-
-    public Color getLabelColor() {
-        return labelColor;
-    }
-
-    public void setLabelColor(Color labelColor) {
-        this.labelColor = labelColor;
     }
 
     public String getFontName() {
