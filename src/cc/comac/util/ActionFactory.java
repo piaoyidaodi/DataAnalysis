@@ -310,6 +310,7 @@ public class ActionFactory {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DataDrawPanel panel=(DataDrawPanel)parent;
+                panel.getDialog().updatedata();
                 panel.getDialog().setVisible(true);
             }
         };
