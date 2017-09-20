@@ -114,7 +114,7 @@ public class WorkspaceDataProcessRunnable implements Runnable{
         ArrayList<Double>[] eachLabelArray=null;
 
         int labelSize=0;
-        int STEP=50;
+        final int STEP=50;
         int head=0;
         int tail=STEP;
 
@@ -140,10 +140,13 @@ public class WorkspaceDataProcessRunnable implements Runnable{
             labelSize=lineParas.length;
             // labelArray line write to labelArray
             for (String alabel : lineParas) {
+                if (alabel.contains("/")) {
+                    alabel=alabel.replace("/", "_");
+                }
                 labelArray.add(alabel);
             }
-            eachLabelArray=new ArrayList[labelSize];
-            for (int i=1;i<labelSize;i++){
+            eachLabelArray=new ArrayList[STEP];
+            for (int i=0;i<STEP;i++){
                 eachLabelArray[i]=new ArrayList<Double>();
             }
         }
@@ -168,52 +171,49 @@ public class WorkspaceDataProcessRunnable implements Runnable{
                         timeLabelArray.add(lineParas[i]);
                     }else {
                         eachLabelArray[i].add(Double.parseDouble(lineParas[i]));
-
                     }
                 }
             }
 
-                for (int i=0;i<labelSize;i++){
-                    labelName=labelArray.get(i);
+            for (int i=0;i<labelSize;i++){
+                labelName=labelArray.get(i);
 
-                    String labelFilePath = getParentPath(file) + File.separator + getNameNoPFix(file);
-                    File labelDataFile = new File(labelFilePath + File.separator + labelName + "." + postfix);
+                String labelFilePath = getParentPath(file) + File.separator + getNameNoPFix(file);
+                File labelDataFile = new File(labelFilePath + File.separator + labelName + "." + postfix);
 
-                    try {
-                        objOS = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(labelDataFile)));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e2) {
-                        e2.printStackTrace();
-                    }
-
-                    try {
-                        if (i==0) {
-                            objOS.writeObject(timeLabelArray);
-                            timeLabelArray.clear();
-                        }
-                        else {
-                            objOS.writeObject(eachLabelArray[i]);
-                            eachLabelArray[i].clear();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        objOS.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    fScanner.close();
-                    
-                    doZip(labelDataFile);
-                    labelDataFile.delete();
+                try {
+                    objOS = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(labelDataFile)));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e2) {
+                    e2.printStackTrace();
                 }
-                
+
+                try {
+                    if (i==0) {
+                        objOS.writeObject(timeLabelArray);
+                        timeLabelArray.clear();
+                    }
+                    else {
+                        objOS.writeObject(eachLabelArray[i]);
+                        eachLabelArray[i].clear();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    objOS.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                fScanner.close();
+                    
+                doZip(labelDataFile);
+                labelDataFile.delete();
+            }
         }
         else {
             while (tail<=labelSize){
-
                 try {
                     fScanner = new Scanner(new BufferedReader(new FileReader(file)));
                 } catch (FileNotFoundException e) {
@@ -222,14 +222,13 @@ public class WorkspaceDataProcessRunnable implements Runnable{
 
                 if (fScanner.hasNextLine()) fScanner.nextLine();
                 while (fScanner.hasNextLine()){
-
                     String line=fScanner.nextLine();
                     String[] lineParas=line.split("\\s+");
                     for (int i=head;i<tail;i++){
                         if (i==0){
                             timeLabelArray.add(lineParas[i]);
                         }else {
-                            eachLabelArray[i].add(Double.parseDouble(lineParas[i]));
+                            eachLabelArray[i-head].add(Double.parseDouble(lineParas[i]));
                         }
                     }
                 }
@@ -254,8 +253,8 @@ public class WorkspaceDataProcessRunnable implements Runnable{
                             timeLabelArray.clear();
                         }
                         else {
-                            objOS.writeObject(eachLabelArray[i]);
-                            eachLabelArray[i].clear();
+                            objOS.writeObject(eachLabelArray[i-head]);
+                            eachLabelArray[i-head].clear();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

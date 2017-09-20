@@ -2,13 +2,16 @@ package cc.comac.ui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -88,7 +91,7 @@ public class SettingPanelDialog extends JDialog {
         this.add(canvasPropertyPanel,BorderLayout.CENTER);
         this.add(buttonPanel,BorderLayout.SOUTH);
 
-        this.setLocation((int)DeviceProperty.getDeviceWidth()/3, (int)DeviceProperty.getDeviceHeight()/3);
+        this.setLocation((int)DeviceProperty.getDeviceWidth()/3, (int)DeviceProperty.getDeviceHeight()*2/5);
         
         updatedata();
     }
@@ -121,7 +124,20 @@ public class SettingPanelDialog extends JDialog {
         dataPropertyPanel.setLineWidth(lineWidth);
         dataPropertyPanel.setLineColor(lineColor);
         
-        this.pack();
+        canvasPropertyPanel.setLeftPadding(controller.getCanvasSpecialYOffset());
+        canvasPropertyPanel.setBottomPadding(controller.getCanvasSpecialXOffset());
+        canvasPropertyPanel.setGeneralPadding(controller.getCanvasGeneralOffset());
+        canvasPropertyPanel.setAxisFontName(controller.getFontName());
+        canvasPropertyPanel.setAxisFontSize(controller.getFontSize());
+        canvasPropertyPanel.setLabelFontName(controller.getLabelNameFontName());
+        canvasPropertyPanel.setLabelFontSize(controller.getLabelNameFontSize());
+        canvasPropertyPanel.setPanelBGColor(controller.getPanelBGColor());
+        canvasPropertyPanel.setCanvasBGColor(controller.getCanvasBGColor());
+        canvasPropertyPanel.setCoordinateColor(controller.getCoordinateColor());
+        canvasPropertyPanel.setScaleLineColor(controller.getScaleLineColor());
+        
+        this.setSize((int)DeviceProperty.getDeviceWidth()*2/5, (int)DeviceProperty.getDeviceHeight()/3);
+        this.setResizable(false);
     }
     
     private void updateCtrl(){
@@ -146,6 +162,18 @@ public class SettingPanelDialog extends JDialog {
         controller.setLineWidth(dataPropertyPanel.getLineWidth());
         controller.setLineColor(dataPropertyPanel.getLineColor());
         controller.setLabelNameFontColor(dataPropertyPanel.getLineColor());
+        
+        controller.setCanvasSpecialYOffset(canvasPropertyPanel.getLeftPadding());
+        controller.setCanvasSpecialXOffset(canvasPropertyPanel.getBottomPadding());
+        controller.setCanvasGeneralOffset(canvasPropertyPanel.getGeneralPadding());
+        controller.setFontName(canvasPropertyPanel.getAxisFontName());
+        controller.setFontSize(canvasPropertyPanel.getAxisFontSize());
+        controller.setLabelNameFontName(canvasPropertyPanel.getLabelFontName());
+        controller.setLabelNameFontSize(canvasPropertyPanel.getLabelFontSize());
+        controller.setPanelBGColor(canvasPropertyPanel.getPanelBGColor());
+        controller.setCanvasBGColor(canvasPropertyPanel.getCanvasBGColor());
+        controller.setCoordinateColor(canvasPropertyPanel.getCanvasBGColor());
+        controller.setScaleLineColor(canvasPropertyPanel.getScaleLineColor());
     }
 }
 
@@ -281,7 +309,7 @@ class DataPropertyPanel extends JPanel{
     }
 
     public float getLineWidth() {
-        return (float)lineWidth.getValue();
+        return (float)(double) lineWidth.getValue();
     }
 
     public void setLineWidth(float lineWidth) {
@@ -299,15 +327,207 @@ class DataPropertyPanel extends JPanel{
 }
 
 class CanvasPropertyPanel extends JPanel{
+    private JPanel canvasPaddingPanel=null;
+    private JSpinner leftPadding=null;
+    private JSpinner bottomPadding=null;
+    private JSpinner generalPadding=null;
+    
+    private JPanel fontPropertyPanel=null;
+    private JComboBox<String> axisFontName=null;
+    private JSpinner axisFontSize=null;
+    private JComboBox<String> labelFontName=null;
+    private JSpinner labelFontSize=null;
+    
+    private JPanel colorPropertyPanel=null;
+    private JButton panelBGColorButton=null;
+    private JButton canvasBGColorButton=null;
+    private JButton coordinateColorButton=null;
+    private JButton scaleLineColorButton=null;
+
     public CanvasPropertyPanel() {}
 
     public CanvasPropertyPanel(String title) {
+        canvasPaddingPanel=new JPanel();
+        fontPropertyPanel=new JPanel();
+        colorPropertyPanel=new JPanel();
         this.setBorder(BorderFactory.createTitledBorder(title));
         this.setLayout(new GridLayout(1, 3));
-//        this.addPanel("LableName");
-//        this.addPanel("BaseColors");
-//        this.addPanel("Canvas");
-//        this.addPanel("Coordinate");
+        
+        initCanvasPaddingPanel();
+        initFontPropertyPanel();
+        initColorPropertyPanel();
+        this.add(canvasPaddingPanel);
+        this.add(fontPropertyPanel);
+        this.add(colorPropertyPanel);
     }
+
+    private void initCanvasPaddingPanel() {
+        canvasPaddingPanel.setLayout(new GridLayout(3, 2));
+        canvasPaddingPanel.setBorder(BorderFactory.createTitledBorder("Canvas Padding"));
+        leftPadding=new JSpinner(new SpinnerNumberModel(50, 10, 100, 1));
+        bottomPadding=new JSpinner(new SpinnerNumberModel(35, 10, 50, 1));
+        generalPadding=new JSpinner(new SpinnerNumberModel(10, 0, 30, 1));
+        
+        canvasPaddingPanel.add(new JLabel("LeftPadding:"));
+        canvasPaddingPanel.add(leftPadding);
+        canvasPaddingPanel.add(new JLabel("BottomPadding:"));
+        canvasPaddingPanel.add(bottomPadding);
+        canvasPaddingPanel.add(new JLabel("GeneralPadding:"));
+        canvasPaddingPanel.add(generalPadding);
+    }
+
+    private void initFontPropertyPanel() {
+        fontPropertyPanel.setLayout(new GridLayout(4, 2));
+        fontPropertyPanel.setBorder(BorderFactory.createTitledBorder("Font Property"));
+        String[] fontNames=GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        axisFontName=new JComboBox<>(fontNames);
+        axisFontSize=new JSpinner(new SpinnerNumberModel(12, 8, 20, 1));
+        labelFontName=new JComboBox<>(fontNames);
+        labelFontSize=new JSpinner(new SpinnerNumberModel(12, 8, 20, 1));
+        
+        fontPropertyPanel.add(new JLabel("AxisFontName"));
+        fontPropertyPanel.add(axisFontName);
+        fontPropertyPanel.add(new JLabel("AxisFontSize"));
+        fontPropertyPanel.add(axisFontSize);
+        fontPropertyPanel.add(new JLabel("LabelFontName"));
+        fontPropertyPanel.add(labelFontName);
+        fontPropertyPanel.add(new JLabel("LabelFontSize"));
+        fontPropertyPanel.add(labelFontSize);
+    }
+
+    private void initColorPropertyPanel() {
+        colorPropertyPanel.setLayout(new GridLayout(4, 2));
+        colorPropertyPanel.setBorder(BorderFactory.createTitledBorder("Color Property"));
+        panelBGColorButton=new JButton();
+        panelBGColorButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelBGColorButton.setBackground(JColorChooser.showDialog(null, "Choose Panel Color", panelBGColorButton.getBackground()));
+            }
+        });
+        canvasBGColorButton=new JButton();
+        canvasBGColorButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasBGColorButton.setBackground(JColorChooser.showDialog(null, "Choose Canvas Color", canvasBGColorButton.getBackground()));
+            }
+        });
+        coordinateColorButton=new JButton();
+        coordinateColorButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                coordinateColorButton.setBackground(JColorChooser.showDialog(null, "Choose Axis Color", coordinateColorButton.getBackground()));
+            }
+        });
+        scaleLineColorButton=new JButton();
+        scaleLineColorButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scaleLineColorButton.setBackground(JColorChooser.showDialog(null, "Choose Scale Color", scaleLineColorButton.getBackground()));
+            }
+        });
+        
+        colorPropertyPanel.add(new Label("Panel Color"));
+        colorPropertyPanel.add(panelBGColorButton);
+        colorPropertyPanel.add(new Label("Canvas Color"));
+        colorPropertyPanel.add(canvasBGColorButton);
+        colorPropertyPanel.add(new Label("Axis Color"));
+        colorPropertyPanel.add(coordinateColorButton);
+        colorPropertyPanel.add(new Label("Scale Color"));
+        colorPropertyPanel.add(scaleLineColorButton);
+    }
+
+    public int getLeftPadding() {
+        return (int)leftPadding.getValue();
+    }
+
+    public void setLeftPadding(int leftPadding) {
+        this.leftPadding.setValue(leftPadding);
+    }
+
+    public int getBottomPadding() {
+        return (int)bottomPadding.getValue();
+    }
+
+    public void setBottomPadding(int bottomPadding) {
+        this.bottomPadding.setValue(bottomPadding);
+    }
+
+    public int getGeneralPadding() {
+        return (int)generalPadding.getValue();
+    }
+
+    public void setGeneralPadding(int generalPadding) {
+        this.generalPadding.setValue(generalPadding);
+    }
+
+    public String getAxisFontName() {
+        return axisFontName.getItemAt(axisFontName.getSelectedIndex());
+    }
+
+    public void setAxisFontName(String axisFontName) {
+        this.axisFontName.setSelectedItem(axisFontName);
+    }
+
+    public int getAxisFontSize() {
+        return (int)axisFontSize.getValue();
+    }
+
+    public void setAxisFontSize(int axisFontSize) {
+        this.axisFontSize.setValue(axisFontSize);
+    }
+
+    public String getLabelFontName() {
+        return labelFontName.getItemAt(labelFontName.getSelectedIndex());
+    }
+
+    public void setLabelFontName(String labelFontName) {
+        this.labelFontName.setSelectedItem(labelFontName);
+    }
+
+    public int getLabelFontSize() {
+        return (int)labelFontSize.getValue();
+    }
+
+    public void setLabelFontSize(int labelFontSize) {
+        this.labelFontSize.setValue(labelFontSize);
+    }
+
+    public Color getPanelBGColor() {
+        return panelBGColorButton.getBackground();
+    }
+
+    public void setPanelBGColor(Color panelBGColorButton) {
+        this.panelBGColorButton.setBackground(panelBGColorButton);
+    }
+
+    public Color getCanvasBGColor() {
+        return canvasBGColorButton.getBackground();
+    }
+
+    public void setCanvasBGColor(Color canvasBGColorButton) {
+        this.canvasBGColorButton.setBackground(canvasBGColorButton);
+    }
+
+    public Color getCoordinateColor() {
+        return coordinateColorButton.getBackground();
+    }
+
+    public void setCoordinateColor(Color coordinateColorButton) {
+        this.coordinateColorButton.setBackground(coordinateColorButton);
+    }
+
+    public Color getScaleLineColor() {
+        return scaleLineColorButton.getBackground();
+    }
+
+    public void setScaleLineColor(Color scaleLineColorButton) {
+        this.scaleLineColorButton.setBackground(scaleLineColorButton);
+    }
+    
 }
 

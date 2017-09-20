@@ -104,7 +104,7 @@ public class FileDataProcessRunnable implements Runnable{
         ArrayList<Double>[] eachLabelArray=null;
 
         int labelSize=0;
-        int STEP=50;
+        final int STEP=50;
         int head=0;
         int tail=STEP;
 
@@ -130,14 +130,13 @@ public class FileDataProcessRunnable implements Runnable{
             labelSize=lineParas.length;
             // labelArray line write to labelArray
             for (String alabel : lineParas) {
-                if (alabel.contains("\\")) {
-                    System.out.println(alabel);
-                    alabel=alabel.replace("\\", "_");
+                if (alabel.contains("/")) {
+                    alabel=alabel.replace("/", "_");
                 }
                 labelArray.add(alabel);
             }
-            eachLabelArray=new ArrayList[labelSize];
-            for (int i=1;i<labelSize;i++){
+            eachLabelArray=new ArrayList[STEP];
+            for (int i=1;i<STEP;i++){
                 eachLabelArray[i]=new ArrayList<Double>();
             }
         }
@@ -162,7 +161,6 @@ public class FileDataProcessRunnable implements Runnable{
                         timeLabelArray.add(lineParas[i]);
                     }else {
                         eachLabelArray[i].add(Double.parseDouble(lineParas[i]));
-
                     }
                 }
             }
@@ -223,7 +221,7 @@ public class FileDataProcessRunnable implements Runnable{
                         if (i==0){
                             timeLabelArray.add(lineParas[i]);
                         }else {
-                            eachLabelArray[i].add(Double.parseDouble(lineParas[i]));
+                            eachLabelArray[i-head].add(Double.parseDouble(lineParas[i]));
                         }
                     }
                 }
@@ -248,8 +246,8 @@ public class FileDataProcessRunnable implements Runnable{
                             timeLabelArray.clear();
                         }
                         else {
-                            objOS.writeObject(eachLabelArray[i]);
-                            eachLabelArray[i].clear();
+                            objOS.writeObject(eachLabelArray[i-head]);
+                            eachLabelArray[i-head].clear();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
