@@ -2,6 +2,7 @@ package cc.comac.ui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -17,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import cc.comac.controller.DrawPanelController;
@@ -42,12 +44,15 @@ public class SettingPanelDialog extends JDialog {
     private int endSecond;
     private float lineWidth;
     private Color lineColor;
+    private String lableName;
     
     private DataPropertyPanel dataPropertyPanel=null;
     private CanvasPropertyPanel canvasPropertyPanel=null;
+    
     private JPanel buttonPanel=null;
     private JButton okButton=null;
     private JButton cancelButton=null;
+    private JButton resetButton=null;
     
     public SettingPanelDialog() {
         super();
@@ -58,40 +63,67 @@ public class SettingPanelDialog extends JDialog {
         this.panel=(DataDrawPanel)parent;
         this.controller=panel.getController();
         this.timeLabelValue=controller.getTimeLabelValue();
-//        this.dataLabelValue=controller.getDataLabelValue();
         this.setLayout(new BorderLayout());
-        dataPropertyPanel=new DataPropertyPanel("Data Property");
+        dataPropertyPanel=new DataPropertyPanel("Data Property",controller);
         canvasPropertyPanel=new CanvasPropertyPanel("Canvas Property");
         
         buttonPanel=new JPanel();
         okButton=new JButton("OK");
         cancelButton=new JButton("Cancel");
+        resetButton=new JButton("Reset");
         okButton.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                SettingPanelDialog.this.updateCtrl();
-                SettingPanelDialog.this.setVisible(false);
-                panel.update();
-                
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        SettingPanelDialog.this.updateCtrl();
+                        SettingPanelDialog.this.setVisible(false);
+                        panel.update();
+                    }
+                });
             }
         });
         cancelButton.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                SettingPanelDialog.this.setVisible(false);
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        SettingPanelDialog.this.setVisible(false);
+                    }
+                });
+            }
+        });
+        resetButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        controller.reset();
+                        SettingPanelDialog.this.updatedata();
+                    }
+                });
             }
         });
         buttonPanel.add(okButton);
         buttonPanel.add(cancelButton);
-        
+        buttonPanel.add(resetButton);
         
         this.add(dataPropertyPanel,BorderLayout.NORTH);
         this.add(canvasPropertyPanel,BorderLayout.CENTER);
         this.add(buttonPanel,BorderLayout.SOUTH);
 
-        this.setLocation((int)DeviceProperty.getDeviceWidth()/3, (int)DeviceProperty.getDeviceHeight()*2/5);
+        this.setLocation((int)DeviceProperty.getDeviceWidth()/3, (int)DeviceProperty.getDeviceHeight()/3);        
+        this.setSize((int)DeviceProperty.getDeviceWidth()*3/5, (int)DeviceProperty.getDeviceHeight()*2/5);
+        this.setResizable(false);
         
         updatedata();
     }
@@ -101,8 +133,8 @@ public class SettingPanelDialog extends JDialog {
         String[] timeEndString;
         this.timeIndexMin=controller.getTimeIndexMin();
         this.timeIndexMax=controller.getTimeIndexMax();
-        timeStart=timeLabelValue[timeIndexMin];
-        timeEnd=timeLabelValue[timeIndexMax];
+        this.timeStart=timeLabelValue[timeIndexMin];
+        this.timeEnd=timeLabelValue[timeIndexMax];
         timeStartString=timeStart.split(":");
         timeEndString=timeEnd.split(":");
         
@@ -114,6 +146,7 @@ public class SettingPanelDialog extends JDialog {
         endSecond=Integer.parseInt(timeEndString[2]);
         lineWidth=controller.getLineWidth();
         lineColor=controller.getLineColor();
+        lableName=controller.getLabelName();
         
         dataPropertyPanel.setStartHour(startHour);
         dataPropertyPanel.setStartMinute(startMinute);
@@ -123,6 +156,7 @@ public class SettingPanelDialog extends JDialog {
         dataPropertyPanel.setEndSecond(endSecond);
         dataPropertyPanel.setLineWidth(lineWidth);
         dataPropertyPanel.setLineColor(lineColor);
+        dataPropertyPanel.setLabelName(lableName);
         
         canvasPropertyPanel.setLeftPadding(controller.getCanvasSpecialYOffset());
         canvasPropertyPanel.setBottomPadding(controller.getCanvasSpecialXOffset());
@@ -135,9 +169,6 @@ public class SettingPanelDialog extends JDialog {
         canvasPropertyPanel.setCanvasBGColor(controller.getCanvasBGColor());
         canvasPropertyPanel.setCoordinateColor(controller.getCoordinateColor());
         canvasPropertyPanel.setScaleLineColor(controller.getScaleLineColor());
-        
-        this.setSize((int)DeviceProperty.getDeviceWidth()*2/5, (int)DeviceProperty.getDeviceHeight()/3);
-        this.setResizable(false);
     }
     
     private void updateCtrl(){
@@ -161,6 +192,7 @@ public class SettingPanelDialog extends JDialog {
         }
         controller.setLineWidth(dataPropertyPanel.getLineWidth());
         controller.setLineColor(dataPropertyPanel.getLineColor());
+        controller.setLabelName(dataPropertyPanel.getLabelName());
         controller.setLabelNameFontColor(dataPropertyPanel.getLineColor());
         
         controller.setCanvasSpecialYOffset(canvasPropertyPanel.getLeftPadding());
@@ -178,6 +210,8 @@ public class SettingPanelDialog extends JDialog {
 }
 
 class DataPropertyPanel extends JPanel{
+    private DrawPanelController controller;
+    
     private JPanel startTimePanel=null;
     private JSpinner startHour=null;
     private JSpinner startMinute=null;
@@ -191,10 +225,12 @@ class DataPropertyPanel extends JPanel{
     private JPanel linePropertyPanel=null;
     private JSpinner lineWidth=null;
     private JButton lineColorButton=null;
+    private JTextField labelNameTxtField=null;
 
     public DataPropertyPanel() {}
 
-    public DataPropertyPanel(String title) {
+    public DataPropertyPanel(String title,DrawPanelController controller) {
+        this.controller=controller;
         startTimePanel=new JPanel();
         endTimePanel=new JPanel();
         linePropertyPanel=new JPanel();
@@ -244,64 +280,79 @@ class DataPropertyPanel extends JPanel{
         linePropertyPanel.setBorder(BorderFactory.createTitledBorder("Line Property"));
         lineWidth=new JSpinner(new SpinnerNumberModel(1.0, 1.0, 3.0, 0.5));
         lineColorButton=new JButton();
-        //TODO background color
+        labelNameTxtField=new JTextField();
         lineColorButton.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                lineColorButton.setBackground(JColorChooser.showDialog(null, "Choose Line Color", lineColorButton.getBackground()));
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        lineColorButton.setBackground(JColorChooser.showDialog(null, "Choose Line Color", lineColorButton.getBackground()));
+                    }
+                });
             }
         });
-        lineColorButton.setBackground(Color.red);
+        lineColorButton.setBackground(controller.getLineColor());
+        labelNameTxtField.setText(controller.getLabelName());
         
         linePropertyPanel.add(new JLabel("Line Width:"));
         linePropertyPanel.add(lineWidth);
         linePropertyPanel.add(new JLabel("Line Color:"));
         linePropertyPanel.add(lineColorButton);
+        linePropertyPanel.add(new JLabel("Label Name:"));
+        linePropertyPanel.add(labelNameTxtField);
     }
     
-    public int getStartHour() {
-        return (int)startHour.getValue();
+    public String getStartHour() {
+        String tmp=String.valueOf(startHour.getValue());
+        return tmp.length()==1?("0"+tmp):tmp;
     }
 
     public void setStartHour(int startHour) {
         this.startHour.setValue(startHour);
     }
 
-    public int getStartMinute() {
-        return (int)startMinute.getValue();
+    public String getStartMinute() {
+        String tmp=String.valueOf(startMinute.getValue());
+        return tmp.length()==1?("0"+tmp):tmp;
     }
 
     public void setStartMinute(int startMinute) {
         this.startMinute.setValue(startMinute);
     }
 
-    public int getStartSecond() {
-        return (int)startSecond.getValue();
+    public String getStartSecond() {
+        String tmp=String.valueOf(startSecond.getValue());
+        return tmp.length()==1?("0"+tmp):tmp;
     }
 
     public void setStartSecond(int startSecond) {
         this.startSecond.setValue(startSecond);
     }
 
-    public int getEndHour() {
-        return (int)endHour.getValue();
+    public String getEndHour() {
+        String tmp=String.valueOf(endHour.getValue());
+        return tmp.length()==1?("0"+tmp):tmp;
     }
 
     public void setEndHour(int endHour) {
         this.endHour.setValue(endHour);
     }
 
-    public int getEndMinute() {
-        return (int)endMinute.getValue();
+    public String getEndMinute() {
+        String tmp=String.valueOf(endMinute.getValue());
+        return tmp.length()==1?("0"+tmp):tmp;
     }
 
     public void setEndMinute(int endMinute) {
         this.endMinute.setValue(endMinute);
     }
 
-    public int getEndSecond() {
-        return (int)endSecond.getValue();
+    public String getEndSecond() {
+        String tmp=String.valueOf(endSecond.getValue());
+        return tmp.length()==1?("0"+tmp):tmp;
     }
 
     public void setEndSecond(int endSecond) {
@@ -309,7 +360,7 @@ class DataPropertyPanel extends JPanel{
     }
 
     public float getLineWidth() {
-        return (float)(double) lineWidth.getValue();
+        return Float.parseFloat(String.valueOf(lineWidth.getValue()));
     }
 
     public void setLineWidth(float lineWidth) {
@@ -322,6 +373,14 @@ class DataPropertyPanel extends JPanel{
 
     public void setLineColor(Color lineColor) {
         this.lineColorButton.setBackground(lineColor);
+    }
+
+    public String getLabelName() {
+        return labelNameTxtField.getText().length()>15?labelNameTxtField.getText().substring(0,15):labelNameTxtField.getText();
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelNameTxtField.setText(labelName);
     }
 
 }
@@ -403,7 +462,13 @@ class CanvasPropertyPanel extends JPanel{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                panelBGColorButton.setBackground(JColorChooser.showDialog(null, "Choose Panel Color", panelBGColorButton.getBackground()));
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        panelBGColorButton.setBackground(JColorChooser.showDialog(null, "Choose Panel Color", panelBGColorButton.getBackground()));
+                    }
+                });
             }
         });
         canvasBGColorButton=new JButton();
@@ -411,7 +476,13 @@ class CanvasPropertyPanel extends JPanel{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasBGColorButton.setBackground(JColorChooser.showDialog(null, "Choose Canvas Color", canvasBGColorButton.getBackground()));
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        canvasBGColorButton.setBackground(JColorChooser.showDialog(null, "Choose Canvas Color", canvasBGColorButton.getBackground()));
+                    }
+                });
             }
         });
         coordinateColorButton=new JButton();
@@ -419,7 +490,13 @@ class CanvasPropertyPanel extends JPanel{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                coordinateColorButton.setBackground(JColorChooser.showDialog(null, "Choose Axis Color", coordinateColorButton.getBackground()));
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        coordinateColorButton.setBackground(JColorChooser.showDialog(null, "Choose Axis Color", coordinateColorButton.getBackground()));
+                    }
+                });
             }
         });
         scaleLineColorButton=new JButton();
@@ -427,7 +504,13 @@ class CanvasPropertyPanel extends JPanel{
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                scaleLineColorButton.setBackground(JColorChooser.showDialog(null, "Choose Scale Color", scaleLineColorButton.getBackground()));
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        scaleLineColorButton.setBackground(JColorChooser.showDialog(null, "Choose Scale Color", scaleLineColorButton.getBackground()));
+                    }
+                });
             }
         });
         

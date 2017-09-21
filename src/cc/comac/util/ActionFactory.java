@@ -219,7 +219,13 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                WestPaneTreeController.getInstance().updateLabelFileModel();
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        WestPaneTreeController.getInstance().updateLabelFileModel();
+                    }
+                });
             }
         };
         action.putValue(Action.NAME, "Draw");
@@ -234,15 +240,22 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targetLabel=Context.getInstance().getTargetLabelZipFilePath();
-                File targetLabelParentDirFile=new File(targetLabel).getParentFile();
-                if (Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
-                    try {
-                        Desktop.getDesktop().open(targetLabelParentDirFile);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        String targetLabel=Context.getInstance().getTargetLabelZipFilePath();
+                        File targetLabelParentDirFile=new File(targetLabel).getParentFile();
+                        if (Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                            try {
+                                Desktop.getDesktop().open(targetLabelParentDirFile);
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
                     }
-                }
+                });
+                
             }
         };
         action.putValue(Action.NAME, "Open In Explorer");
@@ -257,9 +270,16 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrameCenterPane centerPane=Context.getInstance().getMainFrameCenterPane();
-                System.out.println(centerPane.getSelectedIndex());
-                centerPane.removeTabAt(centerPane.getSelectedIndex());
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        MainFrameCenterPane centerPane=Context.getInstance().getMainFrameCenterPane();
+                        System.out.println(centerPane.getSelectedIndex());
+                        centerPane.removeTabAt(centerPane.getSelectedIndex());
+                    }
+                });
+                
             }
         };
         action.putValue(Action.NAME, "Close");
@@ -309,9 +329,16 @@ public class ActionFactory {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                DataDrawPanel panel=(DataDrawPanel)parent;
-                panel.getDialog().updatedata();
-                panel.getDialog().setVisible(true);
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        DataDrawPanel panel=(DataDrawPanel)parent;
+                        panel.getDialog().updatedata();
+                        panel.getDialog().setVisible(true);
+                    }
+                });
+                
             }
         };
         action.putValue(Action.NAME, "Settings");

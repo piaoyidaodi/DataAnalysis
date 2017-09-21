@@ -3,6 +3,7 @@ package cc.comac.ui.mainlayout;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -102,7 +103,7 @@ public class DataDrawPanel extends BlankDataDrawPanel {
     }
     
     protected void drawNameLabel(Graphics2D g2) {
-        targetLabelZipFileName=controller.getTargetLabelZipFileName();
+        targetLabelZipFileName=controller.getLabelName();
         g2.setFont(labelNameFont);
         g2.setColor(labelNameFontColor);
 //        canvasPoints[2].x-nameXOffset*targetLabelZipFileName.length(), canvasPoints[2].y+nameYOffset
@@ -140,7 +141,6 @@ public class DataDrawPanel extends BlankDataDrawPanel {
               }
             }
         }
-        
     }
 
     protected void drawTimeLabels(Graphics2D g2){
@@ -260,7 +260,13 @@ public class DataDrawPanel extends BlankDataDrawPanel {
                     controller.setTimeIndexMax(tmpTimeIndexMax);
                     System.out.println("press "+pPre.toString());
                     System.out.println("Release "+pBhd.toString());
-                    DataDrawPanel.this.update();
+                    EventQueue.invokeLater(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            DataDrawPanel.this.update();
+                        }
+                    });
                 }
             }
             
@@ -302,10 +308,14 @@ public class DataDrawPanel extends BlankDataDrawPanel {
                     g2.setStroke(stroke);
                     g2.setColor(new Color(0,128,0, 150));
                     g2.drawRect(pPre.x, pPre.y, pBhd.x-pPre.x, pBhd.y-pPre.y);
-                    DataDrawPanel.this.update();
-                    
+                    EventQueue.invokeLater(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            DataDrawPanel.this.update();
+                        }
+                    });
                 }
-                
             }
         });
         

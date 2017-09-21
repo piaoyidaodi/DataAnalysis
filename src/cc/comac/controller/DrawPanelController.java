@@ -42,6 +42,7 @@ public class DrawPanelController {
     
     private Color lineColor;
     private float lineWidth;
+    private String labelName;
 
     private String labelNameFontName;
     private int labelNameFontStyle;
@@ -51,9 +52,9 @@ public class DrawPanelController {
     public DrawPanelController(JSplitPane mainPane,String targetLabelZipFilePath,TargetDataPair pair) {
         this.targetLabelZipFilePath=targetLabelZipFilePath;
         this.targetLabelZipFileName=targetLabelZipFilePath.substring(targetLabelZipFilePath.lastIndexOf(File.separator)+1,targetLabelZipFilePath.lastIndexOf("."));
+        this.labelName=this.targetLabelZipFileName;
         this.timeLabelValue=pair.getTimeLabelValue();
         this.dataLabelValue=pair.getDataLabelValue();
-        //TODO Reset para
         this.timeIndexMin=0;
         this.timeIndexMax=timeLabelValue.length-1;
         
@@ -66,18 +67,18 @@ public class DrawPanelController {
         this.canvasSpecialXOffset=35;
         this.canvasSpecialYOffset=50;
         
-        this.setFontName("SansSerif");
-        this.setFontStyle(Font.BOLD);
-        this.setFontSize(12);
-        this.setLabelFontColor(Color.black);
+        this.fontName="SansSerif";
+        this.fontStyle=Font.BOLD;
+        this.fontSize=12;
+        this.labelFontColor=Color.black;
         
-        this.setLineColor(Color.red);
-        this.setLineWidth(1.0F);
+        this.lineColor=Color.red;
+        this.lineWidth=1.0F;
         
-        this.setLabelNameFontName("SansSerif");
-        this.setLabelNameFontStyle(Font.BOLD);
-        this.setLabelNameFontSize(12);
-        this.setLabelNameFontColor(Color.red);
+        this.labelNameFontName="SansSerif";
+        this.labelNameFontStyle=Font.BOLD;
+        this.labelNameFontSize=12;
+        this.labelNameFontColor=Color.red;
         
         update();
     }
@@ -132,6 +133,36 @@ public class DrawPanelController {
                 yStep+=ySpan;
             }
         }
+    }
+    
+    public void reset(){
+        this.labelName=this.targetLabelZipFileName;
+        this.timeIndexMin=0;
+        this.timeIndexMax=timeLabelValue.length-1;
+        
+        this.panelBGColor=new Color(211,211,211,205);
+        this.canvasBGColor=Color.white;
+        this.coordinateColor=Color.darkGray;
+        this.scaleLineColor=new Color(100,149,237,150);
+        
+        this.canvasGeneralOffset=10;
+        this.canvasSpecialXOffset=35;
+        this.canvasSpecialYOffset=50;
+        
+        this.fontName="SansSerif";
+        this.fontStyle=Font.BOLD;
+        this.fontSize=12;
+        this.labelFontColor=Color.black;
+        
+        this.lineColor=Color.red;
+        this.lineWidth=1.0F;
+        
+        this.labelNameFontName="SansSerif";
+        this.labelNameFontStyle=Font.BOLD;
+        this.labelNameFontSize=12;
+        this.labelNameFontColor=Color.red;
+        
+        update();
     }
     
     public int getTimeIndexMin() {
@@ -324,6 +355,14 @@ public class DrawPanelController {
 
     public void setLabelNameFontColor(Color labelNameFontColor) {
         this.labelNameFontColor = labelNameFontColor;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
     }
 
 }
