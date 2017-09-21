@@ -2,18 +2,24 @@ package cc.comac.util;
 
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import cc.comac.controller.WestPaneTreeController;
+import cc.comac.data.DataSave;
 import cc.comac.ui.dialog.AboutDialog;
 import cc.comac.ui.dialog.FileChooserDialog;
 import cc.comac.ui.dialog.ThemeChooserDialog;
@@ -82,39 +88,69 @@ public class ActionFactory {
         return action;
     }
 
-    public static AbstractAction getSaveAction(JComponent parent) {
+    public static AbstractAction getSaveImageAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Complete the SaveAction
-                
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        JSplitPane splitPane=(JSplitPane)Context.getInstance().getMainFrameCenterPane().getSelectedComponent();
+                        DataDrawPanel panel=(DataDrawPanel)splitPane.getLeftComponent();
+                        File tmp=new File(panel.getController().getTargetLabelZipFilePath());
+                        File targetFolder=new File(tmp.getParent()+File.separator+"image");
+                        if (!targetFolder.exists()) {
+                            targetFolder.mkdirs();
+                        }
+                        File target=new File(targetFolder+File.separator+panel.getController().getLabelName()+".png");
+                        if (target.exists()) {
+                            target.delete();
+                        }
+                        
+                        BufferedImage image=new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
+                        Graphics2D g2=image.createGraphics();
+                        panel.paint(g2);
+                        try {
+                            ImageIO.write(image, "png", target);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         };
-        action.putValue(Action.NAME, "Save");
-        action.putValue(Action.SHORT_DESCRIPTION, "Save File");
+        action.putValue(Action.NAME, "Save Image...");
+        action.putValue(Action.SHORT_DESCRIPTION, "Save Image");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         return action;
     }
 
-    public static AbstractAction getSaveAsAction(JComponent parent) {
+    public static AbstractAction getSaveCsvAction(JComponent parent) {
         action=new AbstractAction() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Refine the CurrentDirectory
-                FileChooserDialog fileChooserDialog=FileChooserDialog.getInstance();
-                fileChooserDialog.init();
-                fileChooserDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooserDialog.setCurrentDirectory(new File(Context.getInstance().getTargetDir()));
+                JSplitPane splitPane=(JSplitPane)Context.getInstance().getMainFrameCenterPane().getSelectedComponent();
+                DataDrawPanel panel=(DataDrawPanel)splitPane.getLeftComponent();
+                File tmp=new File(panel.getController().getTargetLabelZipFilePath());
+                File targetFolder=new File(tmp.getParent()+File.separator+"data_csv_format");
+                if (!targetFolder.exists()) {
+                    targetFolder.mkdirs();
+                }
+                File targetFile=new File(targetFolder+File.separator+panel.getController().getLabelName()+".csv");
+                if (targetFile.exists()) {
+                    targetFile.delete();
+                }
                 
-                fileChooserDialog.showSaveDialog(parent);
-
+                DataSave dataSave=new DataSave(panel, targetFile);
+                new Thread(dataSave).start();
             }
         };
-        action.putValue(Action.NAME, "Save As...");
-        action.putValue(Action.SHORT_DESCRIPTION, "Save File As...");
+        action.putValue(Action.NAME, "Save As CSV...");
+        action.putValue(Action.SHORT_DESCRIPTION, "Save File As CSV");
         action.putValue(Action.SMALL_ICON, null);
         action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
         

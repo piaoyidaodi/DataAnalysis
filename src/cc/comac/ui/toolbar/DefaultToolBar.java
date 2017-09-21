@@ -26,7 +26,7 @@ public class DefaultToolBar extends JToolBar {
         this.addSeparator(commonSepaSize);
         this.add(ActionFactory.getOpenDirectoryAction(this));
         this.addSeparator(commonSepaSize);
-        this.add(ActionFactory.getSaveAction(this));
+        this.add(ActionFactory.getSaveImageAction(this));
         this.addSeparator(commonSepaSize);
         // Add cursor action
         JButton btnSelect=this.add(ActionFactory.getMouseSelectAction(this));

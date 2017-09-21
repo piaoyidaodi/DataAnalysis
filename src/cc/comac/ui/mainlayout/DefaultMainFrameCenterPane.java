@@ -16,7 +16,7 @@ public class DefaultMainFrameCenterPane extends JTabbedPane {
 
     private HashMap<String, Boolean> drawNote=null;
     private HashMap<String, DrawPanelController> drawPanelController=null;
-    
+
     public DefaultMainFrameCenterPane() {}
 
     public DefaultMainFrameCenterPane(JSplitPane mainPane) {

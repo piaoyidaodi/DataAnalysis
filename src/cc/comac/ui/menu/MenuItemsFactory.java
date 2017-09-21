@@ -24,13 +24,13 @@ public class MenuItemsFactory {
     }
 
     public static JMenuItem getSaveItem(JComponent parent) {
-        menuItem=new JMenuItem(ActionFactory.getSaveAction(parent));
+        menuItem=new JMenuItem(ActionFactory.getSaveImageAction(parent));
         menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
         return menuItem;
     }
 
     public static JMenuItem getSaveAsItem(JComponent parent) {
-        menuItem=new JMenuItem(ActionFactory.getSaveAsAction(parent));
+        menuItem=new JMenuItem(ActionFactory.getSaveCsvAction(parent));
         menuItem.setDisplayedMnemonicIndex(5);
         menuItem.setAccelerator(KeyStroke.getKeyStroke("ctrl alt S"));
         return menuItem;
